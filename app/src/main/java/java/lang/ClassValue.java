@@ -25,8 +25,6 @@
 
 package java.lang;
 
-import org.jruby.util.collections.ClassValueCalculator;
-
 import java.util.concurrent.ConcurrentHashMap;
 
 public abstract class ClassValue<T> {
@@ -42,7 +40,7 @@ public abstract class ClassValue<T> {
         if (obj != null) {
             return obj;
         } else {
-            synchronized(this) {
+            synchronized (this) {
                 obj = this.cache.get(cls);
                 if (obj != null) {
                     return obj;

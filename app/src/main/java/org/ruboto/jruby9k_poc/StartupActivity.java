@@ -6,8 +6,6 @@ import android.os.Bundle;
 import org.jruby.util.cli.Options;
 import org.ruboto.JRubyAdapter;
 
-import java.util.Properties;
-
 public class StartupActivity extends Activity {
 
     @Override

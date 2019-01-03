@@ -19,18 +19,26 @@ import java.io.OutputStreamWriter;
 // import com.android.dx.rop.cst.CstUtf8;
 
 public class DexClient {
-    /** number of warnings during processing */
+    /**
+     * number of warnings during processing
+     */
     private static int warnings = 0;
 
-    /** number of errors during processing */
+    /**
+     * number of errors during processing
+     */
     private static int errors = 0;
 
-    /** {@code non-null;} output file in-progress */
+    /**
+     * {@code non-null;} output file in-progress
+     */
     private static DexFile outputDex;
     private static DexOptions dexOptions = new DexOptions();
+
     static {
         dexOptions.targetApiLevel = DexFormat.API_NO_EXTENDED_OPCODES;
     }
+
     private final CfOptions cfOptions;
 
     public DexClient() {
@@ -47,22 +55,22 @@ public class DexClient {
     }
 
     public byte[] classesToDex(String[] names, byte[][] byteArrays) {
-      for (int i = 0; i < names.length; i++) {
-        String name = names[i];
-        byte[] byteArray = byteArrays[i];
-        processClass(name, byteArray);
-      }
+        for (int i = 0; i < names.length; i++) {
+            String name = names[i];
+            byte[] byteArray = byteArrays[i];
+            processClass(name, byteArray);
+        }
 
-      byte[] outputArray = writeDex();
+        byte[] outputArray = writeDex();
 
-      return outputArray;
+        return outputArray;
     }
 
     /**
      * Processes one classfile.
      *
-     * @param name {@code non-null;} name of the file, clipped such that it
-     * <i>should</i> correspond to the name of the class it contains
+     * @param name  {@code non-null;} name of the file, clipped such that it
+     *              <i>should</i> correspond to the name of the class it contains
      * @param bytes {@code non-null;} contents of the file
      * @return whether processing was successful
      */
@@ -72,7 +80,7 @@ public class DexClient {
                     .translate(new DirectClassFile(bytes, name, true), bytes, cfOptions, dexOptions, outputDex);
             return true;
         } catch (ParseException ex) {
-          ex.printStackTrace();
+            ex.printStackTrace();
         }
 
         warnings++;
@@ -94,7 +102,7 @@ public class DexClient {
         try {
             outArray = outputDex.toDex(out, false);
         } catch (Exception ex) {
-          ex.printStackTrace();
+            ex.printStackTrace();
         }
 
         return outArray;
