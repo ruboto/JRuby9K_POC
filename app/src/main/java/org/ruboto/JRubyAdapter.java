@@ -15,7 +15,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 public class JRubyAdapter {
-    private static Object ruby;
+    private static org.jruby.embed.ScriptingContainer ruby;
     private static boolean isDebugBuild = false;
     private static PrintStream output = null;
     private static boolean initialized = false;
@@ -91,24 +91,7 @@ public class JRubyAdapter {
     }
 
     public static Object runScriptlet(String code) {
-        try {
-            Method runScriptletMethod = ruby.getClass().getMethod("runScriptlet", String.class);
-            return runScriptletMethod.invoke(ruby, code);
-        } catch (NoSuchMethodException nsme) {
-            throw new RuntimeException(nsme);
-        } catch (IllegalAccessException iae) {
-            throw new RuntimeException(iae);
-        } catch (InvocationTargetException ite) {
-            if (isDebugBuild) {
-                if (ite.getCause() instanceof RuntimeException) {
-                    throw ((RuntimeException) ite.getCause());
-                } else {
-                    throw ((Error) ite.getCause());
-                }
-            } else {
-                return null;
-            }
-        }
+        return ruby.runScriptlet(code);
     }
 
     public static boolean setUpJRuby(Context appContext) {
@@ -182,7 +165,9 @@ public class JRubyAdapter {
                 //
                 org.jruby.RubyInstanceConfig config = new org.jruby.RubyInstanceConfig();
                 config.setDisableGems(true);
-                // config.setLoader(classLoader);
+
+                ClassLoader classLoader = JRubyAdapter.class.getClassLoader();
+                config.setLoader(classLoader);
 
                 if (output != null) {
                     config.setOutput(output);
@@ -203,7 +188,7 @@ public class JRubyAdapter {
                 // FIXME(uwe): Write tutorial on profiling.
                 // container.getProvider().getRubyInstanceConfig().setProfilingMode(mode);
 
-                // Thread.currentThread().setContextClassLoader(classLoader);
+                Thread.currentThread().setContextClassLoader(classLoader);
 
                 String scriptsDir = scriptsDirName(appContext);
                 addLoadPath(scriptsDir);

@@ -24,5 +24,6 @@ public class StartupActivity extends Activity {
         System.out.println("System#getProperty(\"sun.arch.data.model\"): " + System.getProperty("sun.arch.data.model"));
         System.out.println("Integer.getInteger(\"sun.arch.data.model\"): " + Integer.getInteger("sun.arch.data.model"));
         final boolean jrubyOk = JRubyAdapter.setUpJRuby(StartupActivity.this);
+        JRubyAdapter.runScriptlet("puts 'Hello, world!'");
     }
 }
