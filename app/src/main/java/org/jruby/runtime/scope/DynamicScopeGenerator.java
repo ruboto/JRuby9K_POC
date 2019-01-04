@@ -1,9 +1,14 @@
 package org.jruby.runtime.scope;
 
-import com.android.dx.*;
-import me.qmx.jitescript.CodeBlock;
-import me.qmx.jitescript.JDKVersion;
-import me.qmx.jitescript.JiteClass;
+import com.android.dx.BinaryOp;
+import com.android.dx.Code;
+import com.android.dx.Comparison;
+import com.android.dx.DexMaker;
+import com.android.dx.FieldId;
+import com.android.dx.Local;
+import com.android.dx.MethodId;
+import com.android.dx.TypeId;
+
 import org.jruby.Ruby;
 import org.jruby.parser.StaticScope;
 import org.jruby.runtime.DynamicScope;
@@ -12,20 +17,19 @@ import org.jruby.util.ClassDefiningClassLoader;
 import org.jruby.util.OneShotClassLoader;
 import org.jruby.util.collections.NonBlockingHashMapLong;
 
+import java.io.IOException;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
-
-import java.io.IOException;
-import java.io.PrintStream;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static org.jruby.util.CodegenUtils.ci;
+import me.qmx.jitescript.JDKVersion;
+import me.qmx.jitescript.JiteClass;
+
 import static org.jruby.util.CodegenUtils.p;
-import static org.jruby.util.CodegenUtils.sig;
 
 /**
  * A generator for DynamicScope subclasses, using fields for storage and specializing appropriate methods.
