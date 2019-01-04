@@ -89,7 +89,7 @@ public class JRubyAdapter {
         return setUpJRuby(appContext, output == null ? System.out : output);
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public static synchronized boolean setUpJRuby(Context appContext, PrintStream out) {
         if (!initialized) {
             Log.d("Max memory: " + (Runtime.getRuntime().maxMemory() / (1024 * 1024)) + "MB");
@@ -124,7 +124,7 @@ public class JRubyAdapter {
                 //
 
                 if (out != null) {
-                  output = out;
+                    output = out;
                 }
 
                 //////////////////////////////////
@@ -267,13 +267,15 @@ public class JRubyAdapter {
     }
 
     // FIXME(uwe):  Remove when we stop supporting Ruby 1.8
-    @Deprecated public static boolean isRubyOneEight() {
-        return ((String)get("RUBY_VERSION")).startsWith("1.8.");
+    @Deprecated
+    public static boolean isRubyOneEight() {
+        return ((String) get("RUBY_VERSION")).startsWith("1.8.");
     }
 
     // FIXME(uwe):  Remove when we stop supporting Ruby 1.8
-    @Deprecated public static boolean isRubyOneNine() {
-    String rv = ((String)get("RUBY_VERSION"));
+    @Deprecated
+    public static boolean isRubyOneNine() {
+        String rv = ((String) get("RUBY_VERSION"));
         return rv.startsWith("2.1.") || rv.startsWith("2.0.") || rv.startsWith("1.9.");
     }
 
@@ -283,11 +285,11 @@ public class JRubyAdapter {
         //try {
         //    t.printStackTrace(output);
         //} catch (NullPointerException npe) {
-            // TODO(uwe): t.printStackTrace() should not fail
-            System.err.println(t.getClass().getName() + ": " + t);
-            for (StackTraceElement ste : t.getStackTrace()) {
-                output.append(ste.toString() + "\n");
-            }
+        // TODO(uwe): t.printStackTrace() should not fail
+        System.err.println(t.getClass().getName() + ": " + t);
+        for (StackTraceElement ste : t.getStackTrace()) {
+            output.append(ste.toString() + "\n");
+        }
         //}
     }
 
@@ -322,26 +324,26 @@ public class JRubyAdapter {
     }
 
     public static void setOutputStream(PrintStream out) {
-      if (ruby == null) {
-        output = out;
-      } else {
-        try {
-          Method setOutputMethod = ruby.getClass().getMethod("setOutput", PrintStream.class);
-          setOutputMethod.invoke(ruby, out);
-          Method setErrorMethod = ruby.getClass().getMethod("setError", PrintStream.class);
-          setErrorMethod.invoke(ruby, out);
-        } catch (IllegalArgumentException e) {
-            handleInitException(e);
-        } catch (SecurityException e) {
-            handleInitException(e);
-        } catch (IllegalAccessException e) {
-            handleInitException(e);
-        } catch (InvocationTargetException e) {
-            handleInitException(e);
-        } catch (NoSuchMethodException e) {
-            handleInitException(e);
+        if (ruby == null) {
+            output = out;
+        } else {
+            try {
+                Method setOutputMethod = ruby.getClass().getMethod("setOutput", PrintStream.class);
+                setOutputMethod.invoke(ruby, out);
+                Method setErrorMethod = ruby.getClass().getMethod("setError", PrintStream.class);
+                setErrorMethod.invoke(ruby, out);
+            } catch (IllegalArgumentException e) {
+                handleInitException(e);
+            } catch (SecurityException e) {
+                handleInitException(e);
+            } catch (IllegalAccessException e) {
+                handleInitException(e);
+            } catch (InvocationTargetException e) {
+                handleInitException(e);
+            } catch (NoSuchMethodException e) {
+                handleInitException(e);
+            }
         }
-      }
     }
 
 }
