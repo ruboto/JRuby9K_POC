@@ -78,16 +78,7 @@ public class JRubyAdapter {
     }
 
     public static void put(String name, Object object) {
-        try {
-            Method putMethod = ruby.getClass().getMethod("put", String.class, Object.class);
-            putMethod.invoke(ruby, name, object);
-        } catch (NoSuchMethodException nsme) {
-            throw new RuntimeException(nsme);
-        } catch (IllegalAccessException iae) {
-            throw new RuntimeException(iae);
-        } catch (InvocationTargetException ite) {
-            throw new RuntimeException(ite);
-        }
+        ruby.put(name, object);
     }
 
     public static Object runScriptlet(String code) {
@@ -110,31 +101,8 @@ public class JRubyAdapter {
             Log.d("Memory allocation OK");
             setDebugBuild(appContext);
             Log.d("Setting up JRuby runtime (" + (isDebugBuild ? "DEBUG" : "RELEASE") + ")");
-            System.setProperty("jruby.backtrace.style", "normal"); // normal raw full mri
-            System.setProperty("jruby.bytecode.version", "1.6");
-            // BEGIN Ruboto RubyVersion
-            System.setProperty("jruby.compat.version", "RUBY1_9"); // RUBY1_9 is the default in JRuby 1.7
-            // END Ruboto RubyVersion
-            // System.setProperty("jruby.compile.backend", "DALVIK");
-            System.setProperty("jruby.compile.mode", "OFF"); // OFF OFFIR JITIR? FORCE FORCEIR
-            System.setProperty("jruby.interfaces.useProxy", "true");
-            System.setProperty("jruby.ir.passes", "LocalOptimizationPass,DeadCodeElimination");
-            System.setProperty("jruby.management.enabled", "false");
-            System.setProperty("jruby.native.enabled", "false");
-            System.setProperty("jruby.objectspace.enabled", "false");
-            System.setProperty("jruby.rewrite.java.trace", "true");
-            System.setProperty("jruby.thread.pooling", "true");
 
-            // Uncomment these to debug/profile Ruby source loading
-            // Analyse the output: grep "LoadService:   <-" | cut -f5 -d- | cut -c2- | cut -f1 -dm | awk '{total = total + $1}END{print total}'
-            // System.setProperty("jruby.debug.loadService", "true");
-            // System.setProperty("jruby.debug.loadService.timing", "true");
-
-            // Used to enable JRuby to generate proxy classes
-            System.setProperty("jruby.ji.proxyClassFactory", "org.ruboto.DalvikProxyClassFactory");
-            System.setProperty("jruby.ji.upper.case.package.name.allowed", "true");
-            System.setProperty("jruby.class.cache.path", appContext.getDir("dex", 0).getAbsolutePath());
-            System.setProperty("java.io.tmpdir", appContext.getCacheDir().getAbsolutePath());
+            setSystemProperties(appContext);
 
             try {
                 String jrubyVersion = org.jruby.runtime.Constants.VERSION;
@@ -220,6 +188,35 @@ public class JRubyAdapter {
             }
         }
         return initialized;
+    }
+
+    private static void setSystemProperties(Context appContext) {
+        System.setProperty("jruby.backtrace.style", "normal"); // normal raw full mri
+        System.setProperty("jruby.bytecode.version", "1.6");
+        // BEGIN Ruboto RubyVersion
+        System.setProperty("jruby.compat.version", "RUBY1_9"); // RUBY1_9 is the default in JRuby 1.7
+        // END Ruboto RubyVersion
+        // System.setProperty("jruby.compile.backend", "DALVIK");
+        System.setProperty("jruby.compile.mode", "OFF"); // OFF OFFIR JITIR? FORCE FORCEIR
+        System.setProperty("jruby.interfaces.useProxy", "true");
+        System.setProperty("jruby.ir.passes", "LocalOptimizationPass,DeadCodeElimination");
+        System.setProperty("jruby.management.enabled", "false");
+        System.setProperty("jruby.native.enabled", "false");
+        System.setProperty("jruby.objectspace.enabled", "false");
+        System.setProperty("jruby.rewrite.java.trace", "true");
+        System.setProperty("jruby.thread.pooling", "true");
+
+        // Uncomment these to debug/profile Ruby source loading
+        // Analyse the output: grep "LoadService:   <-" | cut -f5 -d- | cut -c2- | cut -f1 -dm | awk '{total = total + $1}END{print total}'
+        // System.setProperty("jruby.debug.loadService", "true");
+        // System.setProperty("jruby.debug.loadService.timing", "true");
+
+        // Used to enable JRuby to generate proxy classes
+        System.setProperty("jruby.ji.proxyClassFactory", "org.ruboto.DalvikProxyClassFactory");
+        System.setProperty("jruby.ji.upper.case.package.name.allowed", "true");
+        System.setProperty("jruby.class.cache.path", appContext.getDir("dex", 0).getAbsolutePath());
+        System.setProperty("java.io.tmpdir", appContext.getCacheDir().getAbsolutePath());
+        System.setProperty("sun.arch.data.model", "64");
     }
 
     public static void setScriptFilename(String name) {

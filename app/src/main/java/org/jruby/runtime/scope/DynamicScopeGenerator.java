@@ -105,7 +105,7 @@ public class DynamicScopeGenerator {
         // acquire constructor handle and store it
         try {
             MethodHandle mh = MethodHandles.lookup().findConstructor(p, MethodType.methodType(void.class, StaticScope.class, DynamicScope.class));
-            mh = mh.asType(MethodType.methodType(DynamicScope.class, StaticScope.class, DynamicScope.class));
+//            mh = mh.asType(MethodType.methodType(p, StaticScope.class, DynamicScope.class));
             MethodHandle previousMH = specializedFactories.putIfAbsent(size, mh);
             if (previousMH != null) mh = previousMH;
 
@@ -285,7 +285,7 @@ public class DynamicScopeGenerator {
             code.throwValue(sizeErrorVar);
 
             // setValueDepthZero
-            MethodId<T, Void> setValueDepthZeroMethod = dexClass.getMethod(TypeId.VOID, "setValueDepthZero", iRubyObjectTypeId, TypeId.INT);
+            MethodId<T, IRubyObject> setValueDepthZeroMethod = dexClass.getMethod(iRubyObjectTypeId, "setValueDepthZero", iRubyObjectTypeId, TypeId.INT);
             code = dexMaker.declare(setValueDepthZeroMethod, Modifier.PUBLIC);
             offset = code.getParameter(1, TypeId.INT);
             value = code.getParameter(0, iRubyObjectTypeId);
@@ -309,7 +309,7 @@ public class DynamicScopeGenerator {
                     code.mark(cases[i]);
                     FieldId<T, IRubyObject> selectedField = dexClass.getField(iRubyObjectTypeId, newFields[i]);
                     code.iput(selectedField, thisLocal, value);
-                    code.returnVoid();
+                    code.returnValue(value);
                 }
                 code.mark(defaultError);
             }

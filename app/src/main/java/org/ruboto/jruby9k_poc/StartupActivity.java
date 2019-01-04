@@ -3,7 +3,6 @@ package org.ruboto.jruby9k_poc;
 import android.app.Activity;
 import android.os.Bundle;
 
-import org.jruby.util.cli.Options;
 import org.ruboto.JRubyAdapter;
 
 public class StartupActivity extends Activity {
@@ -17,11 +16,32 @@ public class StartupActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        System.out.println("Options.COMPILE_INVOKEDYNAMIC.load(): " + Options.COMPILE_INVOKEDYNAMIC.load());
-        System.getProperties().setProperty("sun.arch.data.model", "64");
-        System.out.println("System#getProperty(\"sun.arch.data.model\"): " + System.getProperty("sun.arch.data.model"));
-        System.out.println("Integer.getInteger(\"sun.arch.data.model\"): " + Integer.getInteger("sun.arch.data.model"));
-        final boolean jrubyOk = JRubyAdapter.setUpJRuby(StartupActivity.this);
-        JRubyAdapter.runScriptlet("puts 'Hello, world!'");
+        new Thread() {
+            public void run() {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                StartupActivity.this.runOnUiThread(
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                final boolean jrubyOk = JRubyAdapter.setUpJRuby(StartupActivity.this);
+                                JRubyAdapter.runScriptlet("puts 'Hello, world!'");
+                                JRubyAdapter.put("jrubyOk", jrubyOk);
+                                JRubyAdapter.runScriptlet("puts %{jrubyOk: #{jrubyOk}}");
+                                JRubyAdapter.put("title_field", findViewById(R.id.title));
+                                JRubyAdapter.runScriptlet("puts %{title_field: #{title_field.text}}");
+                                JRubyAdapter.put("title_field", findViewById(R.id.title));
+                                JRubyAdapter.runScriptlet("title_field.text = 'Hello Ruby World!'");
+                                JRubyAdapter.put("title_field", findViewById(R.id.title));
+                                JRubyAdapter.runScriptlet("puts %{title_field: #{title_field.text}}");
+                            }
+                        }
+                );
+            }
+        }.start();
+        System.out.println("Thread started.");
     }
 }
