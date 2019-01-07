@@ -24,7 +24,7 @@ public class DalvikProxyClassFactory extends org.jruby.javasupport.proxy.JavaPro
         String cachePath = System.getProperty("jruby.class.cache.path");
         if (cachePath != null) {
             byte[] dalvikByteCode = new DexClient().classesToDex(
-                    new String[] { className.replace('.', '/') + ".class" }, new byte[][] { data });
+                    new String[]{className.replace('.', '/') + ".class"}, new byte[][]{data});
             String jarFileName = cachePath + "/" + className.replace('.', '/') + ".jar";
             createJar(jarFileName, dalvikByteCode);
             try {
@@ -80,7 +80,7 @@ public class DalvikProxyClassFactory extends org.jruby.javasupport.proxy.JavaPro
         }
         return true;
     }
-    
+
     private static Manifest makeManifest() throws IOException {
         Manifest manifest = new Manifest();
         Attributes attribs = manifest.getMainAttributes();
