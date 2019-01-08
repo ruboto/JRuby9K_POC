@@ -17,6 +17,10 @@
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
+        <activity
+            android:name='org.ruboto.SplashActivity'
+            android:configChanges='orientation|screenSize'
+            android:exported='false'
+            android:noHistory='true' />
     </application>
-
 </manifest>
