@@ -21,16 +21,7 @@ public class JRubyAdapter {
     private static boolean initialized = false;
 
     public static Object get(String name) {
-        try {
-            Method getMethod = ruby.getClass().getMethod("get", String.class);
-            return getMethod.invoke(ruby, name);
-        } catch (NoSuchMethodException nsme) {
-            throw new RuntimeException(nsme);
-        } catch (IllegalAccessException iae) {
-            throw new RuntimeException(iae);
-        } catch (InvocationTargetException ite) {
-            throw new RuntimeException(ite);
-        }
+        return ruby.get(name);
     }
 
     public static String getScriptFilename() {
@@ -38,35 +29,12 @@ public class JRubyAdapter {
     }
 
     public static Object runRubyMethod(Object receiver, String methodName, Object... args) {
-        try {
-            Method m = ruby.getClass().getMethod("runRubyMethod", Class.class, Object.class, String.class, Object[].class);
-            return m.invoke(ruby, Object.class, receiver, methodName, args);
-        } catch (NoSuchMethodException nsme) {
-            throw new RuntimeException(nsme);
-        } catch (IllegalAccessException iae) {
-            throw new RuntimeException(iae);
-        } catch (InvocationTargetException ite) {
-            printStackTrace(ite);
-            if (isDebugBuild) {
-                throw new RuntimeException(ite);
-            }
-        }
-        return null;
+        return ruby.runRubyMethod(Object.class, receiver, methodName, args);
     }
 
     @SuppressWarnings("unchecked")
     public static <T> T runRubyMethod(Class<T> returnType, Object receiver, String methodName, Object... args) {
-        try {
-            Method m = ruby.getClass().getMethod("runRubyMethod", Class.class, Object.class, String.class, Object[].class);
-            return (T) m.invoke(ruby, returnType, receiver, methodName, args);
-        } catch (NoSuchMethodException nsme) {
-            throw new RuntimeException(nsme);
-        } catch (IllegalAccessException iae) {
-            throw new RuntimeException(iae);
-        } catch (InvocationTargetException ite) {
-            printStackTrace(ite);
-        }
-        return null;
+        return ruby.runRubyMethod(returnType, receiver, methodName, args);
     }
 
     public static boolean isDebugBuild() {
@@ -327,23 +295,8 @@ public class JRubyAdapter {
         if (ruby == null) {
             output = out;
         } else {
-            try {
-                Method setOutputMethod = ruby.getClass().getMethod("setOutput", PrintStream.class);
-                setOutputMethod.invoke(ruby, out);
-                Method setErrorMethod = ruby.getClass().getMethod("setError", PrintStream.class);
-                setErrorMethod.invoke(ruby, out);
-            } catch (IllegalArgumentException e) {
-                handleInitException(e);
-            } catch (SecurityException e) {
-                handleInitException(e);
-            } catch (IllegalAccessException e) {
-                handleInitException(e);
-            } catch (InvocationTargetException e) {
-                handleInitException(e);
-            } catch (NoSuchMethodException e) {
-                handleInitException(e);
-            }
+            ruby.setOutput(out);
+            ruby.setError(out);
         }
     }
-
 }
