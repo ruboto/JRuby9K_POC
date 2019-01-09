@@ -29,6 +29,7 @@ class JsonActivity
   private
 
   def convert_ruby_to_json
+    puts "Convert '#{@source_field.text}' to JSON"
     @json_field.text = JSON.dump(eval(@source_field.text))
   end
 end
