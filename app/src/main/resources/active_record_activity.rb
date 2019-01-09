@@ -17,7 +17,7 @@ class ActiveRecordActivity
                 on_click_listener: -> field { setup_db }
             @inc_btn = button text: 'Increment',
                 layout: {:weight= => 2, :height= => :fill_parent, :width= => :fill_parent},
-                text_size: [android.util.TypedValue::COMPLEX_UNIT_DIP, 36],
+                text_size: [android.util.TypedValue::COMPLEX_UNIT_DIP, 32],
                 on_click_listener: -> field { increment_counter }
           end
           linear_layout(orientation: :vertical, layout: {:weight= => 2, :height= => :fill_parent, :width= => :fill_parent}) do
