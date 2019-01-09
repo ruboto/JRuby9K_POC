@@ -79,12 +79,18 @@ public class JRubyAdapter {
                 //////////////////////////////////
                 //
                 // Set jruby.home
-                //
-                // final String jrubyHome = "jar:" + apkName + "!/jruby.home";
-
-                // Log.i("Setting JRUBY_HOME: " + jrubyHome);
                 // This needs to be set before the ScriptingContainer is initialized
-                // System.setProperty("jruby.home", jrubyHome);
+                //
+                try {
+                    String apkName = appContext.getPackageManager()
+                            .getApplicationInfo(appContext.getPackageName(), 0).sourceDir;
+                    final String jrubyHome = "jar:" + apkName + "!/META-INF/jruby.home";
+                    Log.i("Setting JRUBY_HOME: " + jrubyHome);
+                    System.setProperty("jruby.home", jrubyHome);
+                } catch (NameNotFoundException e) {
+                    e.printStackTrace();
+                }
+
 
                 //////////////////////////////////
                 //
@@ -180,7 +186,6 @@ public class JRubyAdapter {
         // System.setProperty("jruby.debug.loadService.timing", "true");
 
         // Used to enable JRuby to generate proxy classes
-        System.setProperty("jruby.ji.proxyClassFactory", "org.ruboto.DalvikProxyClassFactory");
         System.setProperty("jruby.ji.upper.case.package.name.allowed", "true");
         System.setProperty("jruby.class.cache.path", appContext.getDir("dex", 0).getAbsolutePath());
         System.setProperty("java.io.tmpdir", appContext.getCacheDir().getAbsolutePath());
