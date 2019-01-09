@@ -46,18 +46,7 @@ public class ScriptLoader {
                             }
                         } else {
                             Log.d("Script defines methods on meta class");
-
-                            // FIXME(uwe): Simplify when we stop support for Ruby 1.8 mode.
-                            if (JRubyAdapter.isRubyOneEight()) {
-                                JRubyAdapter.put("$java_instance", component);
-                                rubyClass = JRubyAdapter.runScriptlet("class << $java_instance; self; end");
-                            } else if (JRubyAdapter.isRubyOneNine()) {
-                                rubyClass = JRubyAdapter.runRubyMethod(component, "singleton_class");
-                            } else {
-                                throw new RuntimeException("Unknown Ruby version: " + JRubyAdapter.get("RUBY_VERSION"));
-                            }
-                            // EMXIF
-
+                            rubyClass = JRubyAdapter.runRubyMethod(component, "singleton_class");
                         }
                     }
                     if (rubyClass == null || !hasBackingJavaClass) {

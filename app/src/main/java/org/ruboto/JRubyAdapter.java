@@ -234,19 +234,6 @@ public class JRubyAdapter {
         ruby = null;
     }
 
-    // FIXME(uwe):  Remove when we stop supporting Ruby 1.8
-    @Deprecated
-    public static boolean isRubyOneEight() {
-        return ((String) get("RUBY_VERSION")).startsWith("1.8.");
-    }
-
-    // FIXME(uwe):  Remove when we stop supporting Ruby 1.8
-    @Deprecated
-    public static boolean isRubyOneNine() {
-        String rv = ((String) get("RUBY_VERSION"));
-        return rv.startsWith("2.1.") || rv.startsWith("2.0.") || rv.startsWith("1.9.");
-    }
-
     static void printStackTrace(Throwable t) {
         // TODO(uwe):  Simplify this when Issue #144 is resolved
         // TODO(scott):  printStackTrace is causing too many problems
