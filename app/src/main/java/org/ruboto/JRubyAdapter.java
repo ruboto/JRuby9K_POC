@@ -11,21 +11,21 @@ import org.jruby.embed.LocalVariableBehavior;
 
 import java.io.File;
 import java.io.PrintStream;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
 public class JRubyAdapter {
     private static org.jruby.embed.ScriptingContainer ruby;
     private static boolean isDebugBuild = false;
     private static PrintStream output = null;
     private static boolean initialized = false;
+    private static LocalContextScope localContextScope = LocalContextScope.SINGLETON; // FIXME(uwe):  Why not CONCURRENT ?  Help needed!
+    private static LocalVariableBehavior localVariableBehavior = LocalVariableBehavior.TRANSIENT;
 
     public static Object get(String name) {
         return ruby.get(name);
     }
 
     public static String getScriptFilename() {
-        return (String) callScriptingContainerMethod(String.class, "getScriptFilename");
+        return ruby.getScriptFilename();
     }
 
     public static Object runRubyMethod(Object receiver, String methodName, Object... args) {
@@ -60,22 +60,13 @@ public class JRubyAdapter {
     @SuppressWarnings({"unchecked", "rawtypes"})
     public static synchronized boolean setUpJRuby(Context appContext, PrintStream out) {
         if (!initialized) {
-            Log.d("Max memory: " + (Runtime.getRuntime().maxMemory() / (1024 * 1024)) + "MB");
-            // BEGIN Ruboto HeapAlloc
-            @SuppressWarnings("unused")
-            byte[] arrayForHeapAllocation = new byte[100 * 1024 * 1024];
-            arrayForHeapAllocation = null;
-            // END Ruboto HeapAlloc
-            Log.d("Memory allocation OK");
             setDebugBuild(appContext);
-            Log.d("Setting up JRuby runtime (" + (isDebugBuild ? "DEBUG" : "RELEASE") + ")");
-
+            Log.d("Setting up JRuby " + org.jruby.runtime.Constants.VERSION
+                    + " (" + (isDebugBuild ? "DEBUG" : "RELEASE") + ")"
+                    + "  Max memory: " + (Runtime.getRuntime().maxMemory() / (1024 * 1024)) + "MB");
             setSystemProperties(appContext);
 
             try {
-                String jrubyVersion = org.jruby.runtime.Constants.VERSION;
-                System.out.println("JRuby version: " + jrubyVersion);
-
                 //////////////////////////////////
                 //
                 // Set jruby.home
@@ -90,7 +81,6 @@ public class JRubyAdapter {
                 } catch (NameNotFoundException e) {
                     e.printStackTrace();
                 }
-
 
                 //////////////////////////////////
                 //
@@ -116,8 +106,6 @@ public class JRubyAdapter {
                     config.setError(output);
                 }
 
-                System.out.println("Ruby version: " + config.getCompatVersion());
-
                 // This will become the global runtime and be used by our ScriptingContainer
                 org.jruby.Ruby.newInstance(config);
 
@@ -125,7 +113,7 @@ public class JRubyAdapter {
                 //
                 // Create the ScriptingContainer
                 //
-                ruby = new org.jruby.embed.ScriptingContainer(LocalContextScope.SINGLETON, LocalVariableBehavior.TRANSIENT);
+                ruby = new org.jruby.embed.ScriptingContainer(localContextScope, localVariableBehavior);
 
                 // FIXME(uwe): Write tutorial on profiling.
                 // container.getProvider().getRubyInstanceConfig().setProfilingMode(mode);
@@ -134,15 +122,16 @@ public class JRubyAdapter {
 
                 String scriptsDir = scriptsDirName(appContext);
                 addLoadPath(scriptsDir);
+                addLoadPath("uri:classloader:/");
                 if (appContext.getFilesDir() != null) {
                     String defaultCurrentDir = appContext.getFilesDir().getPath();
                     Log.d("Setting JRuby current directory to " + defaultCurrentDir);
-                    callScriptingContainerMethod(Void.class, "setCurrentDirectory", defaultCurrentDir);
+                    ruby.setCurrentDirectory(defaultCurrentDir);
                 } else {
                     Log.e("Unable to find app files dir!");
                     if (new File(scriptsDir).exists()) {
                         Log.d("Changing JRuby current directory to " + scriptsDir);
-                        callScriptingContainerMethod(Void.class, "setCurrentDirectory", scriptsDir);
+                        ruby.setCurrentDirectory(scriptsDir);
                     }
                 }
 
@@ -167,9 +156,6 @@ public class JRubyAdapter {
     private static void setSystemProperties(Context appContext) {
         System.setProperty("jruby.backtrace.style", "normal"); // normal raw full mri
         System.setProperty("jruby.bytecode.version", "1.6");
-        // BEGIN Ruboto RubyVersion
-        System.setProperty("jruby.compat.version", "RUBY1_9"); // RUBY1_9 is the default in JRuby 1.7
-        // END Ruboto RubyVersion
         // System.setProperty("jruby.compile.backend", "DALVIK");
         System.setProperty("jruby.compile.mode", "OFF"); // OFF OFFIR JITIR? FORCE FORCEIR
         System.setProperty("jruby.interfaces.useProxy", "true");
@@ -193,7 +179,7 @@ public class JRubyAdapter {
     }
 
     public static void setScriptFilename(String name) {
-        callScriptingContainerMethod(Void.class, "setScriptFilename", name);
+        ruby.setScriptFilename(name);
     }
 
     public static Boolean addLoadPath(String scriptsDir) {
@@ -208,29 +194,15 @@ public class JRubyAdapter {
         }
     }
 
-    // Private methods
-
-    @SuppressWarnings("unchecked")
-    private static <T> T callScriptingContainerMethod(Class<T> returnType, String methodName, Object... args) {
-        Class<?>[] argClasses = new Class[args.length];
-        for (int i = 0; i < argClasses.length; i++) {
-            argClasses[i] = args[i].getClass();
-        }
-        try {
-            Method method = ruby.getClass().getMethod(methodName, argClasses);
-            T result = (T) method.invoke(ruby, args);
-            return result;
-        } catch (RuntimeException re) {
-            re.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            printStackTrace(e);
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public static void setLocalContextScope(LocalContextScope val) {
+        localContextScope = val;
     }
+
+    public static void setLocalVariableBehavior(LocalVariableBehavior val) {
+        localVariableBehavior = val;
+    }
+
+    // Private methods
 
     private static void handleInitException(Exception e) {
         Log.e("Exception starting JRuby");
@@ -239,22 +211,8 @@ public class JRubyAdapter {
         ruby = null;
     }
 
-    static void printStackTrace(Throwable t) {
-        // TODO(uwe):  Simplify this when Issue #144 is resolved
-        // TODO(scott):  printStackTrace is causing too many problems
-        //try {
-        //    t.printStackTrace(output);
-        //} catch (NullPointerException npe) {
-        // TODO(uwe): t.printStackTrace() should not fail
-        System.err.println(t.getClass().getName() + ": " + t);
-        for (StackTraceElement ste : t.getStackTrace()) {
-            output.append(ste.toString() + "\n");
-        }
-        //}
-    }
-
     private static String scriptsDirName(Context context) {
-        File storageDir = null;
+        File storageDir;
         if (isDebugBuild()) {
             storageDir = context.getExternalFilesDir(null);
             if (storageDir == null) {
