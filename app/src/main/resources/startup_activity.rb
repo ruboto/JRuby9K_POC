@@ -4,15 +4,8 @@ class StartupActivity
   def onCreate(savedInstanceState)
     super
     setContentView(R.layout.activity_startup)
-    findViewById(R.id.json_btn).on_click_listener = -> view do
-      begin
-        puts 'listen'
-        start_ruboto_activity('JsonActivity')
-      rescue => e
-        puts "Exception in listener: #{e}"
-        puts e.backtrace.join("\n")
-      end
-    end
+    findViewById(R.id.json_btn).on_click_listener = -> view {start_ruboto_activity('JsonActivity') }
+    findViewById(R.id.ar_btn).on_click_listener = -> view {start_ruboto_activity('ActiveRecordActivity') }
   end
 
   def onResume

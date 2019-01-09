@@ -1,3 +1,5 @@
+abort 'JRuby required' unless RUBY_ENGINE == 'jruby'
+
 require 'rbconfig'
 require 'rubygems'
 require 'time'
@@ -78,13 +80,13 @@ def app_files_path
   @app_files_path ||= "/data/data/#{package}/files"
 end
 
-BUNDLE_JAR = File.expand_path 'libs/bundle.jar'
 PROJECT_DIR = File.expand_path('..', __dir__)
-BUNDLE_PATH = File.join(PROJECT_DIR, 'bin', 'bundle')
-MANIFEST_FILE = File.expand_path 'AndroidManifest.xml'
-PROJECT_PROPS_FILE = File.expand_path 'project.properties'
+BUNDLE_JAR = File.expand_path 'app/libs/bundle.jar', PROJECT_DIR
+BUNDLE_PATH = File.join(PROJECT_DIR, 'app', 'build', 'bundle')
+MANIFEST_FILE = File.expand_path 'app/src/main/AndroidManifest.xml'
+PROJECT_PROPS_FILE = File.expand_path 'app/build.gradle'
 RUBOTO_CONFIG_FILE = File.expand_path 'ruboto.yml'
-GEM_FILE = File.expand_path 'Gemfile.apk'
+GEM_FILE = File.expand_path 'app/Gemfile'
 GEM_LOCK_FILE = "#{GEM_FILE}.lock"
 RELEASE_APK_FILE = File.expand_path "bin/#{build_project_name}-release.apk"
 APK_FILE = File.expand_path "bin/#{build_project_name}-debug.apk"
@@ -650,54 +652,59 @@ file BUNDLE_JAR => [GEM_FILE, GEM_LOCK_FILE] do
   next unless File.exists? GEM_FILE
   puts "Generating #{BUNDLE_JAR}"
   require 'bundler'
-  if false
-    # FIXME(uwe): Issue #547 https://github.com/ruboto/ruboto/issues/547
-    # Bundler.settings[:platform] = Gem::Platform::DALVIK
-    sh "bundle install --gemfile #{GEM_FILE} --path=#{BUNDLE_PATH} --platform=dalvik#{sdk_level} --without development test"
-  else
-    # ENV["DEBUG"] = "true"
-    require 'bundler/vendored_thor'
+  Dir.chdir('app') do
+    if true
+      # FIXME(uwe): Issue #547 https://github.com/ruboto/ruboto/issues/547
+      # Bundler.settings[:platform] = Gem::Platform::DALVIK
+      # sh "bundle install --gemfile #{GEM_FILE} --path=#{BUNDLE_PATH} --platform=dalvik#{sdk_level} --without development test"
+      # sh "bundle package --path=#{BUNDLE_PATH} --all --all-platforms"
+      sh "bundle install --gemfile #{GEM_FILE} --path=#{BUNDLE_PATH} --without development test"
+    else
+      # ENV["DEBUG"] = "true"
+      require 'bundler/vendored_thor'
 
-    # Store original RubyGems/Bundler environment
-    platforms = Gem.platforms
-    ruby_engine = defined?(RUBY_ENGINE) && RUBY_ENGINE
-    env_home = ENV['GEM_HOME']
-    env_path = ENV['GEM_PATH']
+      # Store original RubyGems/Bundler environment
+      platforms = Gem.platforms
+      ruby_engine = defined?(RUBY_ENGINE) && RUBY_ENGINE
+      env_home = ENV['GEM_HOME']
+      env_path = ENV['GEM_PATH']
 
-    # Override RUBY_ENGINE (we can bundle from MRI for JRuby)
-    Gem.platforms = [Gem::Platform::RUBY, Gem::Platform.new("universal-dalvik-#{sdk_level}"), Gem::Platform.new('universal-java')]
-    Gem.paths = {'GEM_HOME' => BUNDLE_PATH, 'GEM_PATH' => BUNDLE_PATH}
-    Gem.refresh
-    old_verbose, $VERBOSE = $VERBOSE, nil
-    begin
-      Object.const_set('RUBY_ENGINE', 'jruby')
-      Object.const_set('JRUBY_VERSION', '7.7.7') unless defined?(JRUBY_VERSION)
-    ensure
-      $VERBOSE = old_verbose
+      # Override RUBY_ENGINE (we can bundle from MRI for JRuby)
+      Gem.platforms = [Gem::Platform::RUBY, Gem::Platform.new("universal-dalvik-#{sdk_level}"), Gem::Platform.new('universal-java')]
+      Gem.paths = {'GEM_HOME' => BUNDLE_PATH, 'GEM_PATH' => BUNDLE_PATH}
+      Gem.refresh
+      old_verbose, $VERBOSE = $VERBOSE, nil
+      begin
+        Object.const_set('RUBY_ENGINE', 'jruby')
+        Object.const_set('JRUBY_VERSION', '7.7.7') unless defined?(JRUBY_VERSION)
+      ensure
+        $VERBOSE = old_verbose
+      end
+      ENV['BUNDLE_GEMFILE'] = GEM_FILE
+      ENV['BUNDLE_PATH'] = BUNDLE_PATH
+
+      Bundler.ui = Bundler::UI::Shell.new
+      # Bundler.bundle_path = Pathname.new BUNDLE_PATH
+      # Bundler.settings.without = [:development, :test]
+      definition = Bundler.definition
+      definition.validate_ruby!
+      Bundler::Installer.install(Bundler.root, definition)
+      unless Dir["#{BUNDLE_PATH}/bundler/gems/"].empty?
+        system("mkdir -p '#{BUNDLE_PATH}/gems'")
+        system("mv #{BUNDLE_PATH}/bundler/gems/* #{BUNDLE_PATH}/gems/")
+      end
+
+      # Restore RUBY_ENGINE (limit the scope of this hack)
+      old_verbose, $VERBOSE = $VERBOSE, nil
+      begin
+        Object.const_set('RUBY_ENGINE', ruby_engine)
+      ensure
+        $VERBOSE = old_verbose
+      end
+      Gem.platforms = platforms
+      ENV['GEM_HOME'] = env_home
+      ENV['GEM_PATH'] = env_path
     end
-    ENV['BUNDLE_GEMFILE'] = GEM_FILE
-
-    Bundler.ui = Bundler::UI::Shell.new
-    Bundler.bundle_path = Pathname.new BUNDLE_PATH
-    Bundler.settings.without = [:development, :test]
-    definition = Bundler.definition
-    definition.validate_ruby!
-    Bundler::Installer.install(Bundler.root, definition)
-    unless Dir["#{BUNDLE_PATH}/bundler/gems/"].empty?
-      system("mkdir -p '#{BUNDLE_PATH}/gems'")
-      system("mv #{BUNDLE_PATH}/bundler/gems/* #{BUNDLE_PATH}/gems/")
-    end
-
-    # Restore RUBY_ENGINE (limit the scope of this hack)
-    old_verbose, $VERBOSE = $VERBOSE, nil
-    begin
-      Object.const_set('RUBY_ENGINE', ruby_engine)
-    ensure
-      $VERBOSE = old_verbose
-    end
-    Gem.platforms = platforms
-    ENV['GEM_HOME'] = env_home
-    ENV['GEM_PATH'] = env_path
   end
 
   GEM_PATH_PATTERN = /^PATH\s*remote:\s*(.*)$\s*specs:\s*(.*)\s+\(.+\)$/
@@ -708,34 +715,21 @@ file BUNDLE_JAR => [GEM_FILE, GEM_LOCK_FILE] do
         "#{BUNDLE_PATH}/gems"
   end
 
-  gem_paths = Dir["#{BUNDLE_PATH}/gems"]
-  raise 'Gem path not found' if gem_paths.empty?
+  gem_paths = Dir["#{BUNDLE_PATH}/jruby/*/gems"]
+  raise "Gem path not found: #{"#{BUNDLE_PATH}/gems"}" if gem_paths.empty?
   raise "Found multiple gem paths: #{gem_paths}" if gem_paths.size > 1
   gem_path = gem_paths[0]
   puts "Found gems in #{gem_path}"
 
-  if package != 'org.ruboto.core' && JRUBY_JARS.none? { |f| File.exists? f }
-    Dir.chdir gem_path do
-      # FIXME(uwe):  Fetch this list from the ruboto-core Gemfile.apk.lock?
-      ruboto_core_extension_gems =
-          %w{activerecord activerecord-jdbc-adapter jruby-openssl json thread_safe}
-      Dir['*'].each do |g|
-        next unless g =~ /#{ruboto_core_extension_gems.join('|')}-[^-]+(-java)$/
-        puts "Removing #{g} gem since it is included in the RubotoCore platform apk."
-        FileUtils.rm_rf g
-      end
-    end
-  else
-    Dir.chdir gem_path do
-      Dir['jruby-openssl-*/lib'].each do |g|
-        rel_dir = "#{g}/lib/ruby"
-        unless File.exists? rel_dir
-          puts "Relocating #{g} files to match standard load path."
-          dirs = Dir["#{g}/*"]
-          FileUtils.mkdir_p rel_dir
-          dirs.each do |d|
-            FileUtils.move d, rel_dir
-          end
+  Dir.chdir gem_path do
+    Dir['jruby-openssl-*/lib'].each do |g|
+      rel_dir = "#{g}/lib/ruby"
+      unless File.exists? rel_dir
+        puts "Relocating #{g} files to match standard load path."
+        dirs = Dir["#{g}/*"]
+        FileUtils.mkdir_p rel_dir
+        dirs.each do |d|
+          FileUtils.move d, rel_dir
         end
       end
     end
@@ -930,7 +924,7 @@ end
 # Methods
 
 def sdk_level
-  File.read(PROJECT_PROPS_FILE).scan(/(?:target=(?:android|google_apis)-)(\d+)/)[0][0].to_i
+  File.read(PROJECT_PROPS_FILE).scan(/(?:targetSdkVersion )(\d+)/)[0][0].to_i
 end
 
 def strings(name)
