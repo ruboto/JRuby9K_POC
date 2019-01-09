@@ -21,8 +21,12 @@
         android:id="@+id/json_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="42dp"
+        android:layout_marginBottom="150dp"
         android:text="JSON"
-        tools:layout_editor_absoluteX="148dp"
-        tools:layout_editor_absoluteY="313dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title" />
 
 </android.support.constraint.ConstraintLayout>
