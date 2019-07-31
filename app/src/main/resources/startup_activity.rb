@@ -29,9 +29,9 @@ class StartupActivity
 
   def test_for_loop
     puts 'Testing for loop'
-    for e in [1,2,3]
-      p e
-      raise "Element not set: #{e.inspect}" unless e
+    for i in [1,2,3]
+      puts "i: #{i.inspect}"
+      raise "Element not set: #{i.inspect}" unless i
     end
   rescue => e
     msg = "Exception testing for loop: #{e}"
