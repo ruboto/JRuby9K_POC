@@ -72,14 +72,16 @@ public class JRubyAdapter {
                 // Set jruby.home
                 // This needs to be set before the ScriptingContainer is initialized
                 //
+                String apkName;
                 try {
-                    String apkName = appContext.getPackageManager()
+                    apkName = appContext.getPackageManager()
                             .getApplicationInfo(appContext.getPackageName(), 0).sourceDir;
                     final String jrubyHome = "jar:" + apkName + "!/META-INF/jruby.home";
                     Log.i("Setting JRUBY_HOME: " + jrubyHome);
                     System.setProperty("jruby.home", jrubyHome);
                 } catch (NameNotFoundException e) {
                     e.printStackTrace();
+                    throw new RuntimeException("Exception setting JRUBY_HOME", e);
                 }
 
                 //////////////////////////////////
@@ -122,6 +124,7 @@ public class JRubyAdapter {
 
                 String scriptsDir = scriptsDirName(appContext);
                 addLoadPath(scriptsDir);
+                addLoadPath("jar:" + apkName + "!/");
                 addLoadPath("uri:classloader:/");
                 if (appContext.getFilesDir() != null) {
                     String defaultCurrentDir = appContext.getFilesDir().getPath();
@@ -183,10 +186,10 @@ public class JRubyAdapter {
     }
 
     public static Boolean addLoadPath(String scriptsDir) {
-        if (new File(scriptsDir).exists()) {
+        if (new File(scriptsDir).exists() || scriptsDir == "uri:classloader:/") {
             Log.i("Added directory to load path: " + scriptsDir);
             Script.addDir(scriptsDir);
-            runScriptlet("$:.unshift '" + scriptsDir + "' ; $:.uniq!");
+            runScriptlet("$:.unshift '" + scriptsDir + "' ; $:.uniq! ; p $:");
             return true;
         } else {
             Log.i("Extra scripts dir not present: " + scriptsDir);

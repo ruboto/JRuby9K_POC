@@ -4,6 +4,7 @@ class StartupActivity
   def onCreate(savedInstanceState)
     super
     setContentView(R.layout.activity_startup)
+    findViewById(R.id.for_loop_btn).on_click_listener = -> view {test_for_loop}
     findViewById(R.id.json_btn).on_click_listener = -> view {start_ruboto_activity('JsonActivity') }
     findViewById(R.id.json_pure_btn).on_click_listener = -> view {require 'json/pure' ; start_ruboto_activity('JsonActivity') }
     findViewById(R.id.ar_btn).on_click_listener = -> view {start_ruboto_activity('ActiveRecordActivity') }
@@ -21,5 +22,16 @@ class StartupActivity
       end
     end
     puts "Thread started."
+  end
+
+  private
+
+  def test_for_loop
+    puts 'Testing for loop'
+    for e in [1,2,3]
+      p e
+    end
+  rescue => e
+    puts "Exception testing for loop: #{e}"
   end
 end
