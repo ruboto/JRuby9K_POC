@@ -1,4 +1,5 @@
 require 'ruboto/activity'
+require 'ruboto/util/toast'
 
 class StartupActivity
   def onCreate(savedInstanceState)
@@ -30,8 +31,11 @@ class StartupActivity
     puts 'Testing for loop'
     for e in [1,2,3]
       p e
+      raise "Element not set: #{e.inspect}" unless e
     end
   rescue => e
-    puts "Exception testing for loop: #{e}"
+    msg = "Exception testing for loop: #{e}"
+    puts msg
+    toast msg
   end
 end
