@@ -20,7 +20,6 @@ class JsonActivity
                 text_size: [android.util.TypedValue::COMPLEX_UNIT_DIP, 36]
             text_view text: 'JSON:', text_size: [android.util.TypedValue::COMPLEX_UNIT_DIP, 36]
             @json_field = edit_text layout: {:width= => :fill_parent},
-                transformation_method: android.text.method.PasswordTransformationMethod.instance,
                 text_size: [android.util.TypedValue::COMPLEX_UNIT_DIP, 36]
           end
         end
@@ -32,6 +31,6 @@ class JsonActivity
     puts 'Load JSON'
     require 'json'
     puts "Convert '#{@source_field.text}' to JSON"
-    @json_field.text = JSON.dump(eval(@source_field.text))
+    @json_field.text = JSON.dump(eval(@source_field.text.to_s))
   end
 end
