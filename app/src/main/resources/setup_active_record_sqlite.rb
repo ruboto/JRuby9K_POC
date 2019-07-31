@@ -1,8 +1,14 @@
 puts 'Setup sqlite database'
 
 require 'active_record/deprecated_finders'
+
+puts "require 'active_record'"
 require 'active_record'
+
+puts "require 'paranoia'"
 require 'paranoia'
+
+puts "require 'observers'"
 require 'rails/observers/activerecord/active_record'
 
 LOG_DIR = "#{DATA_DIR}/log"

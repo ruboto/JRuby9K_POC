@@ -98,7 +98,7 @@ public class JRubyAdapter {
                 // Disable rubygems
                 //
                 org.jruby.RubyInstanceConfig config = new org.jruby.RubyInstanceConfig();
-                config.setDisableGems(true);
+//                config.setDisableGems(true);
 
                 ClassLoader classLoader = JRubyAdapter.class.getClassLoader();
                 config.setLoader(classLoader);

@@ -1,4 +1,5 @@
 require 'ruboto/widget'
+require 'ruboto/util/toast'
 
 ruboto_import_widgets :Button, :CheckedTextView, :EditText, :ImageView, :LinearLayout, :ListView, :TextView
 
@@ -32,6 +33,11 @@ class ActiveRecordActivity
 
   def setup_db
     require 'setup_active_record_sqlite'
+  rescue => e
+    message = "Exception setting up ActiveRecord: #{e}"
+    puts message
+    puts e.backtrace.join("\n")
+    toast message
   end
 
   def increment_counter
