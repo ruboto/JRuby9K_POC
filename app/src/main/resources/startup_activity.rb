@@ -33,6 +33,7 @@ class StartupActivity
       puts "i: #{i.inspect}"
       raise "Element not set: #{i.inspect}" unless i
     end
+    toast 'For loop is OK!'
   rescue => e
     msg = "Exception testing for loop: #{e}"
     puts msg
