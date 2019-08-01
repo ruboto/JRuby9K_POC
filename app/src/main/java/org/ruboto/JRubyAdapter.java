@@ -143,6 +143,7 @@ public class JRubyAdapter {
                 runScriptlet("::RUBOTO_JAVA_PROXIES = {}");
 
                 // TODO(uwe):  Add a way to display startup progress.
+                put("APPLICATION_CONTEXT", appContext.getApplicationContext());
                 put("$application_context", appContext.getApplicationContext());
                 runScriptlet("begin\n  require 'environment'\nrescue LoadError => e\n  puts e\nend");
 
@@ -186,7 +187,7 @@ public class JRubyAdapter {
     }
 
     public static Boolean addLoadPath(String scriptsDir) {
-        if (new File(scriptsDir).exists() || scriptsDir == "uri:classloader:/") {
+        if (new File(scriptsDir).exists() || scriptsDir.equals("uri:classloader:/") || scriptsDir.startsWith("/base.apk!/")) {
             Log.i("Added directory to load path: " + scriptsDir);
             Script.addDir(scriptsDir);
             runScriptlet("$:.unshift '" + scriptsDir + "' ; $:.uniq! ; p $:");

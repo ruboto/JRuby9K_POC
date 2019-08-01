@@ -11,3 +11,9 @@ Use the `update_jar.sh` script in the `app` folder:
 
     cd app
     ./update_jar.sh
+
+## Adding gems
+
+* Add your Gemfile in the `app` directory.
+* Run the `rake task` using JRuby
+    jruby -S rake bundle
