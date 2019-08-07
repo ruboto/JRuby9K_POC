@@ -57,7 +57,9 @@ class ActiveRecordActivity
       message = "Exception setting up simple ActiveRecord: #{e}"
       puts message
       puts e.backtrace.join("\n")
-      toast message
+      runOnUiThread do
+        toast message
+      end
     end
   end
 
