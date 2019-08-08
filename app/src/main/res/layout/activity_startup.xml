@@ -9,81 +9,76 @@
     <TextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="43dp"
         android:text="Hello World!"
-        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.433" />
+        app:layout_constraintVertical_bias="0.413" />
 
     <Button
         android:id="@+id/ar_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="42dp"
-        android:layout_marginBottom="150dp"
+        android:layout_width="0dp"
+        android:layout_height="54dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="68dp"
         android:text="ActiveRecord"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.512"
+        app:layout_constraintEnd_toEndOf="@+id/json_pure_btn"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/json_btn" />
+
+    <Button
+        android:id="@+id/autoload_btn"
+        android:layout_width="0dp"
+        android:layout_height="49dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"
+        android:text="Autoload"
+        app:layout_constraintEnd_toStartOf="@+id/title"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toBottomOf="@+id/title" />
 
     <Button
         android:id="@+id/for_loop_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="42dp"
+        android:layout_width="0dp"
+        android:layout_height="51dp"
+        android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="150dp"
         android:text="for loop"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.511"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title"
-        app:layout_constraintVertical_bias="0.019" />
+        app:layout_constraintStart_toEndOf="@+id/title"
+        app:layout_constraintTop_toTopOf="@+id/autoload_btn" />
 
     <Button
         android:id="@+id/json_btn"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="42dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="150dp"
+        android:layout_marginBottom="8dp"
         android:text="JSON"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/title"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title"
-        app:layout_constraintVertical_bias="0.458" />
+        app:layout_constraintBottom_toTopOf="@+id/ar_btn"
+        app:layout_constraintEnd_toEndOf="@+id/autoload_btn"
+        app:layout_constraintStart_toStartOf="@+id/autoload_btn"
+        app:layout_constraintTop_toBottomOf="@+id/autoload_btn" />
 
     <Button
         android:id="@+id/json_pure_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="42dp"
-        android:layout_marginBottom="150dp"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
         android:text="JSON Pure"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.578"
-        app:layout_constraintStart_toEndOf="@+id/title"
-        app:layout_constraintTop_toBottomOf="@+id/title"
-        app:layout_constraintVertical_bias="0.458" />
+        app:layout_constraintEnd_toEndOf="@+id/for_loop_btn"
+        app:layout_constraintStart_toStartOf="@+id/for_loop_btn"
+        app:layout_constraintTop_toTopOf="@+id/json_btn" />
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="251dp"
-        android:layout_height="218dp"
+        android:layout_width="359dp"
+        android:layout_height="254dp"
         android:src="@drawable/icon"
+        app:layout_constraintBottom_toTopOf="@+id/title"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="16dp" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

@@ -2,7 +2,6 @@ puts "Loading #{__FILE__}"
 
 require 'fileutils'
 require 'active_record'
-require 'active_record/base'
 
 files_dir = APPLICATION_CONTEXT.files_dir
 raise 'Could not access internal storage!' unless files_dir

@@ -2,9 +2,6 @@ require 'ruboto/widget'
 
 ruboto_import_widgets :Button, :CheckedTextView, :EditText, :ImageView, :LinearLayout, :ListView, :TextView
 
-java_import android.content.Intent
-java_import android.view.KeyEvent
-
 class JsonActivity
   def onCreate(savedInstanceState)
     super
