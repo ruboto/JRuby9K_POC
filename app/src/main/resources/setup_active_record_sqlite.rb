@@ -48,5 +48,5 @@ end
 
 class Counter < ActiveRecord::Base
   include ActiveRecord::Validations
-  # validates :value, presence: true
+  validates :value, presence: true
 end

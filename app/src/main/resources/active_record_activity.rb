@@ -1,10 +1,8 @@
+require 'ruboto/stack'
+require 'ruboto/toast'
 require 'ruboto/widget'
-require 'ruboto/util/toast'
 
 ruboto_import_widgets :Button, :CheckedTextView, :EditText, :ImageView, :LinearLayout, :ListView, :TextView
-
-java_import android.content.Intent
-java_import android.view.KeyEvent
 
 class ActiveRecordActivity
   def onCreate(savedInstanceState)

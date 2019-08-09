@@ -139,6 +139,7 @@ public class JRubyAdapter {
                 }
 
                 put("$package_name", appContext.getPackageName());
+                put("APK_PATH", "jar:" + apkName + "!");
 
                 runScriptlet("::RUBOTO_JAVA_PROXIES = {}");
 
@@ -187,7 +188,7 @@ public class JRubyAdapter {
     }
 
     public static Boolean addLoadPath(String scriptsDir) {
-        if (new File(scriptsDir).exists() || scriptsDir.equals("uri:classloader:/") || scriptsDir.startsWith("/base.apk!/")) {
+        if (new File(scriptsDir).exists() || scriptsDir.equals("uri:classloader:/") || scriptsDir.endsWith("/base.apk!/")) {
             Log.i("Added directory to load path: " + scriptsDir);
             Script.addDir(scriptsDir);
             runScriptlet("$:.unshift '" + scriptsDir + "' ; $:.uniq! ; p $:");
