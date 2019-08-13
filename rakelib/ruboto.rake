@@ -10,20 +10,6 @@ require 'timeout'
 
 ON_WINDOWS = (RbConfig::CONFIG['host_os'] =~ /mswin|mingw/i)
 
-ANT_BINARY = ON_WINDOWS ? 'ant.bat' : 'ant'
-ANT_VERSION_CMD = "#{ANT_BINARY} -version"
-
-if (ant_version_output = `#{ANT_VERSION_CMD}`) !~ /version (\d+)\.(\d+)\.(\d+)/ || $1.to_i < 1 || ($1.to_i == 1 && $2.to_i < 8)
-  puts ANT_VERSION_CMD
-  puts ant_version_output
-  puts "ANT version 1.8.0 or later required.  Version found: #{$1}.#{$2}.#{$3}"
-  exit 1
-end
-
-ANT_CMD = ANT_BINARY.dup
-ANT_CMD << ' -v' if Rake.application.options.trace == true
-
-#
 # OS independent "which"
 # From: http://stackoverflow.com/questions/2108727/which-in-ruby-checking-if-program-exists-in-path-from-ruby
 #
@@ -38,48 +24,6 @@ def which(cmd)
   nil
 end
 
-adb_version_str = `adb version`
-(puts 'Android SDK platform tools not in PATH (adb command not found).'; exit 1) unless $? == 0
-(puts "Unrecognized adb version: #{$1}"; exit 1) unless adb_version_str =~ /Android Debug Bridge version (\d+\.\d+\.\d+)/
-(puts "adb version 1.0.31 or later required.  Version found: #{$1}"; exit 1) unless Gem::Version.new($1) >= Gem::Version.new('1.0.31')
-android_home = ENV['ANDROID_HOME']
-if android_home.nil?
-  if (adb_path = which('adb'))
-    android_home = File.dirname(File.dirname(adb_path))
-    ENV['ANDROID_HOME'] = android_home
-  else
-    abort 'You need to set the ANDROID_HOME environment variable.'
-  end
-else
-  android_home = android_home.gsub('\\', '/')
-end
-
-# FIXME(uwe): Simplify when we stop supporting Android SDK < 22: Don't look in platform-tools for dx
-DX_FILENAMES = Dir[File.join(android_home, '{build-tools/*,platform-tools}', ON_WINDOWS ? 'dx.bat' : 'dx')]
-# EMXIF
-
-unless DX_FILENAMES.any?
-  puts 'You need to install the Android SDK Build-tools!'
-  exit 1
-end
-
-def manifest
-  @manifest ||= REXML::Document.new(File.read(MANIFEST_FILE))
-end
-
-def package
-  manifest.root.attribute('package')
-end
-
-def build_project_name
-  doc = REXML::Document.new(File.read('app/src/main/AndroidManifest.xml'))
-  @build_project_name ||= doc.root[:package]
-end
-
-def app_files_path
-  @app_files_path ||= "/data/data/#{package}/files"
-end
-
 PROJECT_DIR = File.expand_path('..', __dir__)
 BUNDLE_JAR = File.expand_path 'app/libs/bundle.jar', PROJECT_DIR
 BUNDLE_PATH = File.join(PROJECT_DIR, 'app', 'build', 'bundle')
@@ -88,9 +32,6 @@ PROJECT_PROPS_FILE = File.expand_path 'app/build.gradle'
 RUBOTO_CONFIG_FILE = File.expand_path 'ruboto.yml'
 GEM_FILE = File.expand_path 'app/Gemfile'
 GEM_LOCK_FILE = "#{GEM_FILE}.lock"
-RELEASE_APK_FILE = File.expand_path "bin/#{build_project_name}-release.apk"
-APK_FILE = File.expand_path "bin/#{build_project_name}-debug.apk"
-TEST_APK_FILE = File.expand_path "test/bin/#{build_project_name}Test-debug.apk"
 JRUBY_JARS = Dir[File.expand_path 'libs/{jruby-*,dx}.jar']
 JARS = Dir[File.expand_path 'libs/*.jar'] - JRUBY_JARS
 RESOURCE_FILES = Dir[File.expand_path 'res/**/*']
@@ -98,30 +39,11 @@ JAVA_SOURCE_FILES = Dir[File.expand_path 'src/**/*.java']
 RUBY_SOURCE_FILES = Dir[File.expand_path 'src/**/*.rb']
 RUBY_ACTIVITY_SOURCE_FILES = RUBY_SOURCE_FILES.select { |fn| fn =~ /_activity.rb$/ }
 OTHER_SOURCE_FILES = Dir[File.expand_path 'src/**/*'] - JAVA_SOURCE_FILES - RUBY_SOURCE_FILES
-CLASSES_CACHE = "#{PROJECT_DIR}/bin/#{build_project_name}-debug-unaligned.apk.d"
 BUILD_XML_FILE = "#{PROJECT_DIR}/build.xml"
-APK_DEPENDENCIES = [:patch_dex, MANIFEST_FILE, BUILD_XML_FILE, RUBOTO_CONFIG_FILE, BUNDLE_JAR, CLASSES_CACHE] + JRUBY_JARS + JARS + JAVA_SOURCE_FILES + RESOURCE_FILES + RUBY_SOURCE_FILES + OTHER_SOURCE_FILES
-QUICK_APK_DEPENDENCIES = APK_DEPENDENCIES - RUBY_SOURCE_FILES
-KEYSTORE_FILE = "#{build_project_name}.keystore"
-KEYSTORE_ALIAS = build_project_name
 JRUBY_ADAPTER_FILE = "#{PROJECT_DIR}/src/org/ruboto/JRubyAdapter.java"
 RUBOTO_ACTIVITY_FILE = "#{PROJECT_DIR}/src/org/ruboto/RubotoActivity.java"
 
-CLEAN.include('bin', 'gen', 'test/bin', 'test/gen')
-
-task default: :debug
-
-if File.exists?(CLASSES_CACHE)
-  expected_jars = File.readlines(CLASSES_CACHE).grep(%r{#{PROJECT_DIR}/libs/(.*\.jar) \\}).map { |l| l =~ %r{#{PROJECT_DIR}/libs/(.*\.jar) \\}; $1 }
-  actual_jars = Dir['libs/*.jar'].map { |f| f =~ /libs\/(.*\.jar)/; $1 }
-  changed_jars = ((expected_jars | actual_jars) - (expected_jars & actual_jars))
-  unless changed_jars.empty?
-    puts "Jars have changed: #{changed_jars.join(', ')}"
-    FileUtils.touch(CLASSES_CACHE)
-  end
-end
-
-file CLASSES_CACHE
+task default: :bundle
 
 file JRUBY_JARS => RUBOTO_CONFIG_FILE do
   next unless File.exists? RUBOTO_CONFIG_FILE
@@ -140,24 +62,6 @@ file JRUBY_JARS => RUBOTO_CONFIG_FILE do
   puts '*' * 80
 end
 
-desc 'build debug package'
-task debug: APK_FILE
-
-namespace :debug do
-  desc 'build debug package if compiled files have changed'
-  task quick: QUICK_APK_DEPENDENCIES do |t|
-    build_apk(t, false)
-  end
-end
-
-desc 'build package and install it on the emulator or device'
-task install: APK_FILE do
-  install_apk(package, APK_FILE)
-end
-
-desc 'uninstall, build, and install the application'
-task reinstall: [:uninstall, APK_FILE, :install]
-
 namespace :install do
   # FIXME(uwe):  Remove December 2013
   desc 'Deprecated:  use "reinstall" instead.'
@@ -169,26 +73,6 @@ namespace :install do
   task quick: 'debug:quick' do
     install_apk(package, APK_FILE)
   end
-end
-
-desc 'Build APK for release'
-task release: [:tag, RELEASE_APK_FILE]
-
-file RELEASE_APK_FILE => [KEYSTORE_FILE] + APK_DEPENDENCIES do |t|
-  build_apk(t, true)
-end
-
-desc 'Create a keystore for signing the release APK'
-task keystore: KEYSTORE_FILE
-
-file KEYSTORE_FILE do
-  unless File.read('ant.properties') =~ /^key.store=/
-    File.open('ant.properties', 'a') { |f| f << "\nkey.store=#{KEYSTORE_FILE}\n" }
-  end
-  unless File.read('ant.properties') =~ /^key.alias=/
-    File.open('ant.properties', 'a') { |f| f << "\nkey.alias=#{KEYSTORE_ALIAS}\n" }
-  end
-  sh "keytool -genkey -v -keystore #{KEYSTORE_FILE} -alias #{KEYSTORE_ALIAS} -keyalg RSA -keysize 2048 -validity 10000"
 end
 
 desc 'Tag this working copy with the current version'
@@ -545,12 +429,6 @@ file RUBOTO_ACTIVITY_FILE => RUBY_ACTIVITY_SOURCE_FILES do |task|
   end
 end
 
-task apk_dependencies: APK_DEPENDENCIES
-
-file APK_FILE => APK_DEPENDENCIES do |t|
-  build_apk(t, false)
-end
-
 task :patch_dex do
   DX_FILENAMES.each do |dx_filename|
     new_dx_content = File.read(dx_filename).dup
@@ -572,51 +450,6 @@ end
 
 desc 'Copy scripts to emulator or device and reload'
 task boing: %w(update_scripts:reload)
-
-namespace :update_scripts do
-  desc 'Copy scripts to emulator and restart the app'
-  task restart: QUICK_APK_DEPENDENCIES do |t|
-    if build_apk(t, false) || !stop_app
-      install_apk(package, APK_FILE)
-    else
-      update_scripts(package)
-    end
-    start_app
-  end
-
-  desc 'Copy scripts to emulator and restart the app'
-  task start: QUICK_APK_DEPENDENCIES do |t|
-    if build_apk(t, false)
-      install_apk(package, APK_FILE)
-    else
-      update_scripts(package)
-    end
-    start_app
-  end
-
-  desc 'Copy scripts to emulator and reload'
-  task reload: QUICK_APK_DEPENDENCIES do |t|
-    if build_apk(t, false)
-      install_apk(package, APK_FILE)
-      start_app
-    else
-      scripts = update_scripts(package)
-      if scripts && app_running?
-        reload_scripts(scripts)
-      else
-        start_app
-      end
-    end
-  end
-end
-
-task test: APK_DEPENDENCIES + [:uninstall] do
-  Dir.chdir('test') do
-    puts 'Running tests'
-    sh "adb uninstall #{package}.tests"
-    sh "#{ANT_CMD} instrument install test"
-  end
-end
 
 namespace :test do
   task quick: :update_scripts do
@@ -810,21 +643,18 @@ end
             END_CODE
           elsif jar =~ %r{concurrent_ruby_ext.jar$}
             puts "Adding JRuby extension library initialization."
-            jar_load_code = <<-END_CODE
-require 'jruby'
-puts 'Starting ConcurrentRubyExtService'
-public
-begin
-  with_large_stack(2048) do
-    Java::ConcurrentRubyExtService.new.basicLoad(JRuby.runtime)
-  end
-rescue Exception
-  puts "Exception starting ConcurrentRubyExtService"
-  puts "\#{$!.class} \#{$!.message}"
-  puts $!
-  puts $!.backtrace.join("\n")
-  raise
-end
+            jar_load_code = <<~END_CODE
+              require 'ruboto/exception'
+              require 'ruboto/stack'
+              public
+              begin
+                with_large_stack(size: 2048, name: 'Starting ConcurrentRubyExtService') do
+                  Java::ConcurrentRubyExtService.new.basicLoad(JRuby.runtime)
+                end
+              rescue Exception => e
+                e.print_backtrace "Exception starting ConcurrentRubyExtService"
+                raise
+              end
             END_CODE
           else
             jar_load_code = ''
