@@ -30,11 +30,11 @@ class Thread
     raise "Unknown option(s): #{opts.inspect}" unless opts.empty?
     block_with_logging = proc do
       begin
-        puts "Running thread #{name} id=#{java.lang.Thread.current_thread.getId}"
+        puts "Running thread #{name.inspect} id=#{java.lang.Thread.current_thread.getId}"
         block.call
-        puts "Thread complete #{name} id=#{java.lang.Thread.current_thread.getId}"
+        puts "Thread complete #{name.inspect} id=#{java.lang.Thread.current_thread.getId}"
       rescue Exception => e
-        STDERR.puts "Exception in #{name}: #{e.class} #{e}\n#{e.backtrace.join("\n")}"
+        STDERR.puts "Exception in #{name.inspect}: #{e.class} #{e}\n#{e.backtrace.join("\n")}"
         raise
       end
     end

@@ -78,7 +78,9 @@ module Ruboto
       if Object.const_defined?(class_name)
         Object.const_get(class_name).class_eval(&block) if block_given?
       else
+        # FIXME(uwe): Why do we create this class here?
         Object.const_set(class_name, Class.new(&block))
+        # EMXIF
       end
       i = android.content.Intent.new
       i.setClass self, java_class.java_class

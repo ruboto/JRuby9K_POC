@@ -46,7 +46,9 @@ public class ScriptLoader {
                             }
                         } else {
                             Log.d("Script defines methods on meta class");
+                            // FIXME(uwe): This is what I want, and it worked in JRuby 1.7.13
                             rubyClass = JRubyAdapter.runRubyMethod(component, "singleton_class");
+                            // EMXIF
                         }
                     }
                     if (rubyClass == null || !hasBackingJavaClass) {
@@ -58,9 +60,11 @@ public class ScriptLoader {
                                 rubyClass = JRubyAdapter.runScriptlet("Java::" + component.getClass().getName());
                             }
                             Log.d("Set class: " + rubyClass);
-                            JRubyAdapter.put(component.getScriptInfo().getRubyClassName(), rubyClass);
+                            // FIXME(uwe): This should work
+                            // JRubyAdapter.put(component.getScriptInfo().getRubyClassName(), rubyClass);
+                            // EMXIF
 
-                            // FIXME(uwe): Workaround since setting the constant fails
+                            // FIXME(uwe): Workaround since setting the constant with `put` fails
                             JRubyAdapter.put("$" + component.getScriptInfo().getRubyClassName(), rubyClass);
                             JRubyAdapter.runScriptlet(component.getScriptInfo().getRubyClassName() + " = $" + component.getScriptInfo().getRubyClassName());
                             // EMXIF

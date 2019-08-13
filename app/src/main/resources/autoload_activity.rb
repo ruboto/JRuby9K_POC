@@ -8,13 +8,11 @@ class AutoloadActivity
     super
     self.content_view =
         linear_layout do
-          @button = button text: 'Generate',
+          @button = button text: 'Autoload',
               layout: {:weight= => 2, :height= => :fill_parent, :width= => :fill_parent},
               text_size: [android.util.TypedValue::COMPLEX_UNIT_DIP, 36],
-              on_click_listener: -> field { convert_ruby_to_json }
+              on_click_listener: -> field { test_autoload }
         end
-
-    @button.on_click_listener = -> view {test_autoload}
   end
 
   private
@@ -25,6 +23,7 @@ class AutoloadActivity
     require 'active_support/dependencies'
 
     ActiveSupport::Dependencies.autoload_paths << SRC_DIR
+    # ActiveSupport::Dependencies.autoload_paths << APK_PATH
 
     AutoloadedClass.new.perform
     toast 'Autoload OK'
