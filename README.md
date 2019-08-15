@@ -7,11 +7,11 @@ This repository contains a sample Android Studio project using JRuby.
 
 ## Adding JRuby to an AndroidStudio project
 
-Use the `update_jar.sh` script in the `app` folder:
+Use the `update_jruby_jar.sh` script in the `app` folder:
 
 ```bash
 cd app
-./update_jar.sh
+./update_jruby_jar.sh
 ```
 
 ## Adding gems
