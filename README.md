@@ -9,12 +9,16 @@ This repository contains a sample Android Studio project using JRuby.
 
 Use the `update_jar.sh` script in the `app` folder:
 
-    cd app
-    ./update_jar.sh
+```bash
+cd app
+./update_jar.sh
+```
 
 ## Adding gems
 
 * Add your Gemfile in the `app` directory.
 * Run the `bundle` Rake task using JRuby
 
-    jruby -S rake bundle
+```bash
+jruby -S rake bundle
+```
