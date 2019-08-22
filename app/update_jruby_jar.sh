@@ -1,23 +1,27 @@
 #!/usr/bin/env bash -e
 
-VERSION="9.2.8.0"
-FULL_VERSION="${VERSION}"
-# FULL_VERSION="${VERSION}-20190809.220806-97" # Uncomment to use a snapshot
+VERSION="9.2.9.0"
+# FULL_VERSION="${VERSION}"
+# FULL_VERSION="${VERSION}-SNAPSHOT" # Uncomment to use a local snapshot
+FULL_VERSION="${VERSION}-20190822.050313-17" # Uncomment to use a remote snapshot
 JAR_FILE="jruby-complete-${FULL_VERSION}.jar"
 M2_CACHED_JAR="$HOME/.m2/repository/org/jruby/jruby-complete/${FULL_VERSION}/${JAR_FILE}"
-eval "DOWNLOAD_DIR=~/Downloads"
+DOWNLOAD_DIR="$HOME/Downloads"
 DOWNLOADED_JAR="${DOWNLOAD_DIR}/${JAR_FILE}"
 
 cd libs
 rm -f bcpkix-jdk15on-*.jar bcprov-jdk15on-*.jar bctls-jdk15on-*.jar cparse-jruby.jar generator.jar jline-*.jar jopenssl.jar jruby-complete-*.jar parser.jar psych.jar readline.jar snakeyaml-*.jar
 
-if [[ "${FULL_VERSION}" == "${VERSION}" ]] ; then
-  # Stable version
-  if [[ ! -f "${M2_CACHED_JAR}" ]] ; then
-    echo No "${M2_CACHED_JAR}" - Downloading.
-    mvn dependency:get -DremoteRepositories=http://repo1.maven.org/maven2/ \
-                   -DgroupId=org.jruby -DartifactId=jruby-complete -Dversion=${FULL_VERSION}
-  fi
+# Try from local repository
+if [[ ! -f "${M2_CACHED_JAR}" ]] ; then
+  echo No "${M2_CACHED_JAR}" - Downloading.
+  set +e
+  mvn dependency:get -DremoteRepositories=http://repo1.maven.org/maven2/ \
+                 -DgroupId=org.jruby -DartifactId=jruby-complete -Dversion=${FULL_VERSION}
+  set -e
+fi
+
+if [[ -f "${M2_CACHED_JAR}" ]] ; then
   cp -a ${M2_CACHED_JAR} .
 else
   # Snapshot version
