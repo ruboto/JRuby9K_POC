@@ -1,4 +1,5 @@
-#!/usr/bin/env bash -e
+#!/usr/bin/env bash
+set +e
 
 VERSION="9.2.9.0"
 # FULL_VERSION="${VERSION}"
