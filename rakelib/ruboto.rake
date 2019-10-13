@@ -252,7 +252,7 @@ file BUNDLE_JAR => [GEM_FILE, GEM_LOCK_FILE] do
   Dir.chdir gem_path do
     scanned_files = []
     source_files = RUBY_SOURCE_FILES.map { |f| f.gsub("#{PROJECT_DIR}/src/", '') }
-    # FIXME(uwe):  The gems should be loaded in the loading order defined by the Gemfile.apk(.lock)
+    # FIXME(uwe):  The gems should be loaded in the loading order defined by the Gemfile(.lock)
     Dir['*/lib/**/*'].sort.each do |f|
       next if File.directory? f
       raise 'Malformed file name' unless f =~ %r{^(.*?)/lib/(.*)$}
