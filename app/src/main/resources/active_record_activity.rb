@@ -10,14 +10,10 @@ class ActiveRecordActivity
     self.content_view =
         linear_layout do
           linear_layout(orientation: :vertical, layout: {:weight= => 2, :height= => :fill_parent, :width= => :fill_parent}) do
-            @setup_button = button text: 'Setup simple',
+            @setup_button = button text: 'Setup DB',
                 layout: {:weight= => 2, :height= => :fill_parent, :width= => :fill_parent},
                 text_size: [android.util.TypedValue::COMPLEX_UNIT_DIP, 36],
                 on_click_listener: -> field { setup_simple_db }
-            @setup_adv_btn = button text: 'Setup advanced',
-                layout: {:weight= => 2, :height= => :fill_parent, :width= => :fill_parent},
-                text_size: [android.util.TypedValue::COMPLEX_UNIT_DIP, 32],
-                on_click_listener: -> field { setup_advanced_db }
             @inc_btn = button text: 'Increment',
                 layout: {:weight= => 2, :height= => :fill_parent, :width= => :fill_parent},
                 text_size: [android.util.TypedValue::COMPLEX_UNIT_DIP, 32],
@@ -48,7 +44,7 @@ class ActiveRecordActivity
     Thread.start do
       require 'setup_active_record_sqlite'
       runOnUiThread do
-        toast 'Simple setup OK'
+        toast 'Database setup OK'
         enable_increment
       end
     rescue => e
@@ -59,16 +55,6 @@ class ActiveRecordActivity
         toast message
       end
     end
-  end
-
-
-  def setup_advanced_db
-    require 'setup_active_record_sqlite_advanced'
-  rescue => e
-    message = "Exception setting up advanced ActiveRecord: #{e}"
-    puts message
-    puts e.backtrace.join("\n")
-    toast message
   end
 
   def increment_counter
@@ -82,7 +68,6 @@ class ActiveRecordActivity
 
   def disable_setup
     @setup_button.enabled = false
-    @setup_adv_btn.enabled = false
     @value_field.text = 'Loading...'
   end
 

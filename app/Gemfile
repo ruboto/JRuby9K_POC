@@ -2,7 +2,7 @@ source 'https://rubygems.org/'
 
 gem 'activerecord', '~>5.2'
 gem 'activerecord-deprecated_finders'
-gem 'activerecord-jdbc-adapter'
+gem 'activerecord-jdbc-adapter', '~>52.6'
 gem 'activerecord-time'
 gem 'concurrent-ruby', '1.0.5'
 gem 'paranoia'
