@@ -8,7 +8,7 @@ class AutoloadActivity
     super
     self.content_view =
         linear_layout do
-          @button = button text: 'Autoload',
+          @button = button text: "Autoload\n(click me)",
               layout: {:weight= => 2, :height= => :fill_parent, :width= => :fill_parent},
               text_size: [android.util.TypedValue::COMPLEX_UNIT_DIP, 36],
               on_click_listener: -> field { test_autoload }
