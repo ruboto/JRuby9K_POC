@@ -1,5 +1,8 @@
 package org.ruboto;
 
+import java.io.IOException;
+import org.ruboto.Script;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 
 public class RubotoActivity extends android.app.Activity implements org.ruboto.RubotoComponent {
@@ -49,7 +52,6 @@ public class RubotoActivity extends android.app.Activity implements org.ruboto.R
      *  Generated Methods
      */
 
-/*
   public void onActivityResult(int requestCode, int resultCode, android.content.Intent data) {
     if (ScriptLoader.isCalledFromJRuby()) {super.onActivityResult(requestCode, resultCode, data); return;}
     if (!JRubyAdapter.isInitialized()) {
@@ -72,9 +74,7 @@ public class RubotoActivity extends android.app.Activity implements org.ruboto.R
       }
     }
   }
-*/
 
-/*
   public void onChildTitleChanged(android.app.Activity childActivity, java.lang.CharSequence title) {
     if (ScriptLoader.isCalledFromJRuby()) {super.onChildTitleChanged(childActivity, title); return;}
     if (!JRubyAdapter.isInitialized()) {
@@ -97,9 +97,7 @@ public class RubotoActivity extends android.app.Activity implements org.ruboto.R
       }
     }
   }
-*/
 
-/*
   public void onConfigurationChanged(android.content.res.Configuration newConfig) {
     if (ScriptLoader.isCalledFromJRuby()) {super.onConfigurationChanged(newConfig); return;}
     if (!JRubyAdapter.isInitialized()) {
@@ -122,9 +120,7 @@ public class RubotoActivity extends android.app.Activity implements org.ruboto.R
       }
     }
   }
-*/
 
-/*
   public void onContentChanged() {
     if (ScriptLoader.isCalledFromJRuby()) {super.onContentChanged(); return;}
     if (!JRubyAdapter.isInitialized()) {
@@ -147,9 +143,7 @@ public class RubotoActivity extends android.app.Activity implements org.ruboto.R
       }
     }
   }
-*/
 
-/*
   public boolean onContextItemSelected(android.view.MenuItem item) {
     if (ScriptLoader.isCalledFromJRuby()) return super.onContextItemSelected(item);
     if (!JRubyAdapter.isInitialized()) {
@@ -172,9 +166,7 @@ public class RubotoActivity extends android.app.Activity implements org.ruboto.R
       }
     }
   }
-*/
 
-/*
   public void onContextMenuClosed(android.view.Menu menu) {
     if (ScriptLoader.isCalledFromJRuby()) {super.onContextMenuClosed(menu); return;}
     if (!JRubyAdapter.isInitialized()) {
@@ -197,9 +189,8 @@ public class RubotoActivity extends android.app.Activity implements org.ruboto.R
       }
     }
   }
-*/
 
-  public void onCreate(Bundle savedInstanceState) {
+  public void onCreate(android.os.Bundle savedInstanceState) {
     if (ScriptLoader.isCalledFromJRuby()) {super.onCreate(savedInstanceState); return;}
     if (preOnCreate(savedInstanceState)) {super.onCreate(savedInstanceState); return;};
 if (JRubyAdapter.isInitialized() && scriptInfo.isReadyToLoad()) {
@@ -225,7 +216,6 @@ if (JRubyAdapter.isInitialized() && scriptInfo.isReadyToLoad()) {
     }
   }
 
-/*
   public void onCreateContextMenu(android.view.ContextMenu menu, android.view.View v, android.view.ContextMenu.ContextMenuInfo menuInfo) {
     if (ScriptLoader.isCalledFromJRuby()) {super.onCreateContextMenu(menu, v, menuInfo); return;}
     if (!JRubyAdapter.isInitialized()) {
@@ -248,9 +238,7 @@ if (JRubyAdapter.isInitialized() && scriptInfo.isReadyToLoad()) {
       }
     }
   }
-*/
 
-/*
   public java.lang.CharSequence onCreateDescription() {
     if (ScriptLoader.isCalledFromJRuby()) return super.onCreateDescription();
     if (!JRubyAdapter.isInitialized()) {
@@ -273,9 +261,7 @@ if (JRubyAdapter.isInitialized() && scriptInfo.isReadyToLoad()) {
       }
     }
   }
-*/
 
-/*
   public boolean onCreateOptionsMenu(android.view.Menu menu) {
     if (ScriptLoader.isCalledFromJRuby()) return super.onCreateOptionsMenu(menu);
     if (!JRubyAdapter.isInitialized()) {
@@ -298,9 +284,7 @@ if (JRubyAdapter.isInitialized() && scriptInfo.isReadyToLoad()) {
       }
     }
   }
-*/
 
-/*
   public boolean onCreatePanelMenu(int featureId, android.view.Menu menu) {
     if (ScriptLoader.isCalledFromJRuby()) return super.onCreatePanelMenu(featureId, menu);
     if (!JRubyAdapter.isInitialized()) {
@@ -323,9 +307,7 @@ if (JRubyAdapter.isInitialized() && scriptInfo.isReadyToLoad()) {
       }
     }
   }
-*/
 
-/*
   public android.view.View onCreatePanelView(int featureId) {
     if (ScriptLoader.isCalledFromJRuby()) return super.onCreatePanelView(featureId);
     if (!JRubyAdapter.isInitialized()) {
@@ -348,9 +330,7 @@ if (JRubyAdapter.isInitialized() && scriptInfo.isReadyToLoad()) {
       }
     }
   }
-*/
 
-/*
   public boolean onCreateThumbnail(android.graphics.Bitmap outBitmap, android.graphics.Canvas canvas) {
     if (ScriptLoader.isCalledFromJRuby()) return super.onCreateThumbnail(outBitmap, canvas);
     if (!JRubyAdapter.isInitialized()) {
@@ -373,9 +353,7 @@ if (JRubyAdapter.isInitialized() && scriptInfo.isReadyToLoad()) {
       }
     }
   }
-*/
 
-/*
   public android.view.View onCreateView(java.lang.String name, android.content.Context context, android.util.AttributeSet attrs) {
     if (ScriptLoader.isCalledFromJRuby()) return super.onCreateView(name, context, attrs);
     if (!JRubyAdapter.isInitialized()) {
@@ -398,9 +376,7 @@ if (JRubyAdapter.isInitialized() && scriptInfo.isReadyToLoad()) {
       }
     }
   }
-*/
 
-/*
   public void onDestroy() {
     if (ScriptLoader.isCalledFromJRuby()) {super.onDestroy(); return;}
     if (!JRubyAdapter.isInitialized()) {
@@ -424,9 +400,7 @@ if (JRubyAdapter.isInitialized() && scriptInfo.isReadyToLoad()) {
     }
     ScriptLoader.unloadScript(this);
   }
-*/
 
-/*
   public boolean onKeyDown(int keyCode, android.view.KeyEvent event) {
     if (ScriptLoader.isCalledFromJRuby()) return super.onKeyDown(keyCode, event);
     if (!JRubyAdapter.isInitialized()) {
@@ -449,9 +423,7 @@ if (JRubyAdapter.isInitialized() && scriptInfo.isReadyToLoad()) {
       }
     }
   }
-*/
 
-/*
   public boolean onKeyMultiple(int keyCode, int repeatCount, android.view.KeyEvent event) {
     if (ScriptLoader.isCalledFromJRuby()) return super.onKeyMultiple(keyCode, repeatCount, event);
     if (!JRubyAdapter.isInitialized()) {
@@ -474,9 +446,7 @@ if (JRubyAdapter.isInitialized() && scriptInfo.isReadyToLoad()) {
       }
     }
   }
-*/
 
-/*
   public boolean onKeyUp(int keyCode, android.view.KeyEvent event) {
     if (ScriptLoader.isCalledFromJRuby()) return super.onKeyUp(keyCode, event);
     if (!JRubyAdapter.isInitialized()) {
@@ -499,9 +469,7 @@ if (JRubyAdapter.isInitialized() && scriptInfo.isReadyToLoad()) {
       }
     }
   }
-*/
 
-/*
   public void onLowMemory() {
     if (ScriptLoader.isCalledFromJRuby()) {super.onLowMemory(); return;}
     if (!JRubyAdapter.isInitialized()) {
@@ -524,9 +492,7 @@ if (JRubyAdapter.isInitialized() && scriptInfo.isReadyToLoad()) {
       }
     }
   }
-*/
 
-/*
   public boolean onMenuItemSelected(int featureId, android.view.MenuItem item) {
     if (ScriptLoader.isCalledFromJRuby()) return super.onMenuItemSelected(featureId, item);
     if (!JRubyAdapter.isInitialized()) {
@@ -549,9 +515,7 @@ if (JRubyAdapter.isInitialized() && scriptInfo.isReadyToLoad()) {
       }
     }
   }
-*/
 
-/*
   public boolean onMenuOpened(int featureId, android.view.Menu menu) {
     if (ScriptLoader.isCalledFromJRuby()) return super.onMenuOpened(featureId, menu);
     if (!JRubyAdapter.isInitialized()) {
@@ -574,9 +538,7 @@ if (JRubyAdapter.isInitialized() && scriptInfo.isReadyToLoad()) {
       }
     }
   }
-*/
 
-/*
   public void onNewIntent(android.content.Intent intent) {
     if (ScriptLoader.isCalledFromJRuby()) {super.onNewIntent(intent); return;}
     if (!JRubyAdapter.isInitialized()) {
@@ -599,9 +561,7 @@ if (JRubyAdapter.isInitialized() && scriptInfo.isReadyToLoad()) {
       }
     }
   }
-*/
 
-/*
   public boolean onOptionsItemSelected(android.view.MenuItem item) {
     if (ScriptLoader.isCalledFromJRuby()) return super.onOptionsItemSelected(item);
     if (!JRubyAdapter.isInitialized()) {
@@ -624,9 +584,7 @@ if (JRubyAdapter.isInitialized() && scriptInfo.isReadyToLoad()) {
       }
     }
   }
-*/
 
-/*
   public void onOptionsMenuClosed(android.view.Menu menu) {
     if (ScriptLoader.isCalledFromJRuby()) {super.onOptionsMenuClosed(menu); return;}
     if (!JRubyAdapter.isInitialized()) {
@@ -649,9 +607,7 @@ if (JRubyAdapter.isInitialized() && scriptInfo.isReadyToLoad()) {
       }
     }
   }
-*/
 
-/*
   public void onPanelClosed(int featureId, android.view.Menu menu) {
     if (ScriptLoader.isCalledFromJRuby()) {super.onPanelClosed(featureId, menu); return;}
     if (!JRubyAdapter.isInitialized()) {
@@ -674,9 +630,7 @@ if (JRubyAdapter.isInitialized() && scriptInfo.isReadyToLoad()) {
       }
     }
   }
-*/
 
-/*
   public void onPause() {
     if (ScriptLoader.isCalledFromJRuby()) {super.onPause(); return;}
     if (!JRubyAdapter.isInitialized()) {
@@ -699,9 +653,7 @@ if (JRubyAdapter.isInitialized() && scriptInfo.isReadyToLoad()) {
       }
     }
   }
-*/
 
-/*
   public void onPostCreate(android.os.Bundle savedInstanceState) {
     if (ScriptLoader.isCalledFromJRuby()) {super.onPostCreate(savedInstanceState); return;}
     if (!JRubyAdapter.isInitialized()) {
@@ -724,9 +676,7 @@ if (JRubyAdapter.isInitialized() && scriptInfo.isReadyToLoad()) {
       }
     }
   }
-*/
 
-/*
   public void onPostResume() {
     if (ScriptLoader.isCalledFromJRuby()) {super.onPostResume(); return;}
     if (!JRubyAdapter.isInitialized()) {
@@ -749,9 +699,7 @@ if (JRubyAdapter.isInitialized() && scriptInfo.isReadyToLoad()) {
       }
     }
   }
-*/
 
-/*
   public boolean onPrepareOptionsMenu(android.view.Menu menu) {
     if (ScriptLoader.isCalledFromJRuby()) return super.onPrepareOptionsMenu(menu);
     if (!JRubyAdapter.isInitialized()) {
@@ -774,9 +722,7 @@ if (JRubyAdapter.isInitialized() && scriptInfo.isReadyToLoad()) {
       }
     }
   }
-*/
 
-/*
   public boolean onPreparePanel(int featureId, android.view.View view, android.view.Menu menu) {
     if (ScriptLoader.isCalledFromJRuby()) return super.onPreparePanel(featureId, view, menu);
     if (!JRubyAdapter.isInitialized()) {
@@ -799,9 +745,7 @@ if (JRubyAdapter.isInitialized() && scriptInfo.isReadyToLoad()) {
       }
     }
   }
-*/
 
-/*
   public void onRestart() {
     if (ScriptLoader.isCalledFromJRuby()) {super.onRestart(); return;}
     if (!JRubyAdapter.isInitialized()) {
@@ -824,9 +768,7 @@ if (JRubyAdapter.isInitialized() && scriptInfo.isReadyToLoad()) {
       }
     }
   }
-*/
 
-/*
   public void onRestoreInstanceState(android.os.Bundle savedInstanceState) {
     if (ScriptLoader.isCalledFromJRuby()) {super.onRestoreInstanceState(savedInstanceState); return;}
     if (!JRubyAdapter.isInitialized()) {
@@ -849,7 +791,6 @@ if (JRubyAdapter.isInitialized() && scriptInfo.isReadyToLoad()) {
       }
     }
   }
-*/
 
   public void onResume() {
     if (ScriptLoader.isCalledFromJRuby()) {super.onResume(); return;}
@@ -874,7 +815,6 @@ if (JRubyAdapter.isInitialized() && scriptInfo.isReadyToLoad()) {
     }
   }
 
-/*
   public void onSaveInstanceState(android.os.Bundle outState) {
     if (ScriptLoader.isCalledFromJRuby()) {super.onSaveInstanceState(outState); return;}
     if (!JRubyAdapter.isInitialized()) {
@@ -897,9 +837,7 @@ if (JRubyAdapter.isInitialized() && scriptInfo.isReadyToLoad()) {
       }
     }
   }
-*/
 
-/*
   public boolean onSearchRequested() {
     if (ScriptLoader.isCalledFromJRuby()) return super.onSearchRequested();
     if (!JRubyAdapter.isInitialized()) {
@@ -922,9 +860,7 @@ if (JRubyAdapter.isInitialized() && scriptInfo.isReadyToLoad()) {
       }
     }
   }
-*/
 
-/*
   public void onStart() {
     if (ScriptLoader.isCalledFromJRuby()) {super.onStart(); return;}
     if (!JRubyAdapter.isInitialized()) {
@@ -947,9 +883,7 @@ if (JRubyAdapter.isInitialized() && scriptInfo.isReadyToLoad()) {
       }
     }
   }
-*/
 
-/*
   public void onStop() {
     if (ScriptLoader.isCalledFromJRuby()) {super.onStop(); return;}
     if (!JRubyAdapter.isInitialized()) {
@@ -972,9 +906,7 @@ if (JRubyAdapter.isInitialized() && scriptInfo.isReadyToLoad()) {
       }
     }
   }
-*/
 
-/*
   public void onTitleChanged(java.lang.CharSequence title, int color) {
     if (ScriptLoader.isCalledFromJRuby()) {super.onTitleChanged(title, color); return;}
     if (!JRubyAdapter.isInitialized()) {
@@ -997,9 +929,7 @@ if (JRubyAdapter.isInitialized() && scriptInfo.isReadyToLoad()) {
       }
     }
   }
-*/
 
-/*
   public boolean onTouchEvent(android.view.MotionEvent event) {
     if (ScriptLoader.isCalledFromJRuby()) return super.onTouchEvent(event);
     if (!JRubyAdapter.isInitialized()) {
@@ -1022,9 +952,7 @@ if (JRubyAdapter.isInitialized() && scriptInfo.isReadyToLoad()) {
       }
     }
   }
-*/
 
-/*
   public boolean onTrackballEvent(android.view.MotionEvent event) {
     if (ScriptLoader.isCalledFromJRuby()) return super.onTrackballEvent(event);
     if (!JRubyAdapter.isInitialized()) {
@@ -1047,9 +975,7 @@ if (JRubyAdapter.isInitialized() && scriptInfo.isReadyToLoad()) {
       }
     }
   }
-*/
 
-/*
   public void onWindowAttributesChanged(android.view.WindowManager.LayoutParams params) {
     if (ScriptLoader.isCalledFromJRuby()) {super.onWindowAttributesChanged(params); return;}
     if (!JRubyAdapter.isInitialized()) {
@@ -1072,9 +998,7 @@ if (JRubyAdapter.isInitialized() && scriptInfo.isReadyToLoad()) {
       }
     }
   }
-*/
 
-/*
   public void onWindowFocusChanged(boolean hasFocus) {
     if (ScriptLoader.isCalledFromJRuby()) {super.onWindowFocusChanged(hasFocus); return;}
     if (!JRubyAdapter.isInitialized()) {
@@ -1097,9 +1021,7 @@ if (JRubyAdapter.isInitialized() && scriptInfo.isReadyToLoad()) {
       }
     }
   }
-*/
 
-/*
   public void onUserInteraction() {
     if (ScriptLoader.isCalledFromJRuby()) {super.onUserInteraction(); return;}
     if (!JRubyAdapter.isInitialized()) {
@@ -1122,9 +1044,7 @@ if (JRubyAdapter.isInitialized() && scriptInfo.isReadyToLoad()) {
       }
     }
   }
-*/
 
-/*
   public void onUserLeaveHint() {
     if (ScriptLoader.isCalledFromJRuby()) {super.onUserLeaveHint(); return;}
     if (!JRubyAdapter.isInitialized()) {
@@ -1147,9 +1067,7 @@ if (JRubyAdapter.isInitialized() && scriptInfo.isReadyToLoad()) {
       }
     }
   }
-*/
 
-/*
   public void onAttachedToWindow() {
     if (ScriptLoader.isCalledFromJRuby()) {super.onAttachedToWindow(); return;}
     if (!JRubyAdapter.isInitialized()) {
@@ -1172,9 +1090,7 @@ if (JRubyAdapter.isInitialized() && scriptInfo.isReadyToLoad()) {
       }
     }
   }
-*/
 
-/*
   public void onBackPressed() {
     if (ScriptLoader.isCalledFromJRuby()) {super.onBackPressed(); return;}
     if (!JRubyAdapter.isInitialized()) {
@@ -1197,9 +1113,7 @@ if (JRubyAdapter.isInitialized() && scriptInfo.isReadyToLoad()) {
       }
     }
   }
-*/
 
-/*
   public void onDetachedFromWindow() {
     if (ScriptLoader.isCalledFromJRuby()) {super.onDetachedFromWindow(); return;}
     if (!JRubyAdapter.isInitialized()) {
@@ -1222,9 +1136,7 @@ if (JRubyAdapter.isInitialized() && scriptInfo.isReadyToLoad()) {
       }
     }
   }
-*/
 
-/*
   public boolean onKeyLongPress(int keyCode, android.view.KeyEvent event) {
     if (ScriptLoader.isCalledFromJRuby()) return super.onKeyLongPress(keyCode, event);
     if (!JRubyAdapter.isInitialized()) {
@@ -1247,9 +1159,7 @@ if (JRubyAdapter.isInitialized() && scriptInfo.isReadyToLoad()) {
       }
     }
   }
-*/
 
-/*
   public void onActionModeFinished(android.view.ActionMode mode) {
     if (ScriptLoader.isCalledFromJRuby()) {super.onActionModeFinished(mode); return;}
     if (!JRubyAdapter.isInitialized()) {
@@ -1272,9 +1182,7 @@ if (JRubyAdapter.isInitialized() && scriptInfo.isReadyToLoad()) {
       }
     }
   }
-*/
 
-/*
   public void onActionModeStarted(android.view.ActionMode mode) {
     if (ScriptLoader.isCalledFromJRuby()) {super.onActionModeStarted(mode); return;}
     if (!JRubyAdapter.isInitialized()) {
@@ -1297,9 +1205,7 @@ if (JRubyAdapter.isInitialized() && scriptInfo.isReadyToLoad()) {
       }
     }
   }
-*/
 
-/*
   public void onAttachFragment(android.app.Fragment fragment) {
     if (ScriptLoader.isCalledFromJRuby()) {super.onAttachFragment(fragment); return;}
     if (!JRubyAdapter.isInitialized()) {
@@ -1322,9 +1228,7 @@ if (JRubyAdapter.isInitialized() && scriptInfo.isReadyToLoad()) {
       }
     }
   }
-*/
 
-/*
   public android.view.View onCreateView(android.view.View parent, java.lang.String name, android.content.Context context, android.util.AttributeSet attrs) {
     if (ScriptLoader.isCalledFromJRuby()) return super.onCreateView(parent, name, context, attrs);
     if (!JRubyAdapter.isInitialized()) {
@@ -1347,9 +1251,7 @@ if (JRubyAdapter.isInitialized() && scriptInfo.isReadyToLoad()) {
       }
     }
   }
-*/
 
-/*
   public boolean onKeyShortcut(int keyCode, android.view.KeyEvent event) {
     if (ScriptLoader.isCalledFromJRuby()) return super.onKeyShortcut(keyCode, event);
     if (!JRubyAdapter.isInitialized()) {
@@ -1372,9 +1274,7 @@ if (JRubyAdapter.isInitialized() && scriptInfo.isReadyToLoad()) {
       }
     }
   }
-*/
 
-/*
   public android.view.ActionMode onWindowStartingActionMode(android.view.ActionMode.Callback callback) {
     if (ScriptLoader.isCalledFromJRuby()) return super.onWindowStartingActionMode(callback);
     if (!JRubyAdapter.isInitialized()) {
@@ -1397,9 +1297,7 @@ if (JRubyAdapter.isInitialized() && scriptInfo.isReadyToLoad()) {
       }
     }
   }
-*/
 
-/*
   public boolean onGenericMotionEvent(android.view.MotionEvent event) {
     if (ScriptLoader.isCalledFromJRuby()) return super.onGenericMotionEvent(event);
     if (!JRubyAdapter.isInitialized()) {
@@ -1422,9 +1320,7 @@ if (JRubyAdapter.isInitialized() && scriptInfo.isReadyToLoad()) {
       }
     }
   }
-*/
 
-/*
   public void onTrimMemory(int arg0) {
     if (ScriptLoader.isCalledFromJRuby()) {super.onTrimMemory(arg0); return;}
     if (!JRubyAdapter.isInitialized()) {
@@ -1447,9 +1343,122 @@ if (JRubyAdapter.isInitialized() && scriptInfo.isReadyToLoad()) {
       }
     }
   }
-*/
 
-/*
+  public void onCreateNavigateUpTaskStack(android.app.TaskStackBuilder arg0) {
+    if (ScriptLoader.isCalledFromJRuby()) {super.onCreateNavigateUpTaskStack(arg0); return;}
+    if (!JRubyAdapter.isInitialized()) {
+      Log.i("Method called before JRuby runtime was initialized: RubotoActivity#onCreateNavigateUpTaskStack");
+      {super.onCreateNavigateUpTaskStack(arg0); return;}
+    }
+    String rubyClassName = scriptInfo.getRubyClassName();
+    if (rubyClassName == null) {super.onCreateNavigateUpTaskStack(arg0); return;}
+    if ((Boolean)JRubyAdapter.runScriptlet(rubyClassName + ".instance_methods(false).any?{|m| m.to_sym == :onCreateNavigateUpTaskStack}")) {
+      JRubyAdapter.runRubyMethod(scriptInfo.getRubyInstance(), "onCreateNavigateUpTaskStack", arg0);
+    } else {
+      if ((Boolean)JRubyAdapter.runScriptlet(rubyClassName + ".instance_methods(false).any?{|m| m.to_sym == :on_create_navigate_up_task_stack}")) {
+        JRubyAdapter.runRubyMethod(scriptInfo.getRubyInstance(), "on_create_navigate_up_task_stack", arg0);
+      } else {
+        if ((Boolean)JRubyAdapter.runScriptlet(rubyClassName + ".instance_methods(true).any?{|m| m.to_sym == :on_create_navigate_up_task_stack}")) {
+          JRubyAdapter.runRubyMethod(scriptInfo.getRubyInstance(), "on_create_navigate_up_task_stack", arg0);
+        } else {
+          JRubyAdapter.runRubyMethod(scriptInfo.getRubyInstance(), "onCreateNavigateUpTaskStack", arg0);
+        }
+      }
+    }
+  }
+
+  public boolean onNavigateUp() {
+    if (ScriptLoader.isCalledFromJRuby()) return super.onNavigateUp();
+    if (!JRubyAdapter.isInitialized()) {
+      Log.i("Method called before JRuby runtime was initialized: RubotoActivity#onNavigateUp");
+      return super.onNavigateUp();
+    }
+    String rubyClassName = scriptInfo.getRubyClassName();
+    if (rubyClassName == null) return super.onNavigateUp();
+    if ((Boolean)JRubyAdapter.runScriptlet(rubyClassName + ".instance_methods(false).any?{|m| m.to_sym == :onNavigateUp}")) {
+      return (Boolean) JRubyAdapter.runRubyMethod(Boolean.class, scriptInfo.getRubyInstance(), "onNavigateUp");
+    } else {
+      if ((Boolean)JRubyAdapter.runScriptlet(rubyClassName + ".instance_methods(false).any?{|m| m.to_sym == :on_navigate_up}")) {
+        return (Boolean) JRubyAdapter.runRubyMethod(Boolean.class, scriptInfo.getRubyInstance(), "on_navigate_up");
+      } else {
+        if ((Boolean)JRubyAdapter.runScriptlet(rubyClassName + ".instance_methods(true).any?{|m| m.to_sym == :on_navigate_up}")) {
+          return (Boolean) JRubyAdapter.runRubyMethod(Boolean.class, scriptInfo.getRubyInstance(), "on_navigate_up");
+        } else {
+          return (Boolean) JRubyAdapter.runRubyMethod(Boolean.class, scriptInfo.getRubyInstance(), "onNavigateUp");
+        }
+      }
+    }
+  }
+
+  public boolean onNavigateUpFromChild(android.app.Activity arg0) {
+    if (ScriptLoader.isCalledFromJRuby()) return super.onNavigateUpFromChild(arg0);
+    if (!JRubyAdapter.isInitialized()) {
+      Log.i("Method called before JRuby runtime was initialized: RubotoActivity#onNavigateUpFromChild");
+      return super.onNavigateUpFromChild(arg0);
+    }
+    String rubyClassName = scriptInfo.getRubyClassName();
+    if (rubyClassName == null) return super.onNavigateUpFromChild(arg0);
+    if ((Boolean)JRubyAdapter.runScriptlet(rubyClassName + ".instance_methods(false).any?{|m| m.to_sym == :onNavigateUpFromChild}")) {
+      return (Boolean) JRubyAdapter.runRubyMethod(Boolean.class, scriptInfo.getRubyInstance(), "onNavigateUpFromChild", arg0);
+    } else {
+      if ((Boolean)JRubyAdapter.runScriptlet(rubyClassName + ".instance_methods(false).any?{|m| m.to_sym == :on_navigate_up_from_child}")) {
+        return (Boolean) JRubyAdapter.runRubyMethod(Boolean.class, scriptInfo.getRubyInstance(), "on_navigate_up_from_child", arg0);
+      } else {
+        if ((Boolean)JRubyAdapter.runScriptlet(rubyClassName + ".instance_methods(true).any?{|m| m.to_sym == :on_navigate_up_from_child}")) {
+          return (Boolean) JRubyAdapter.runRubyMethod(Boolean.class, scriptInfo.getRubyInstance(), "on_navigate_up_from_child", arg0);
+        } else {
+          return (Boolean) JRubyAdapter.runRubyMethod(Boolean.class, scriptInfo.getRubyInstance(), "onNavigateUpFromChild", arg0);
+        }
+      }
+    }
+  }
+
+  public void onPrepareNavigateUpTaskStack(android.app.TaskStackBuilder arg0) {
+    if (ScriptLoader.isCalledFromJRuby()) {super.onPrepareNavigateUpTaskStack(arg0); return;}
+    if (!JRubyAdapter.isInitialized()) {
+      Log.i("Method called before JRuby runtime was initialized: RubotoActivity#onPrepareNavigateUpTaskStack");
+      {super.onPrepareNavigateUpTaskStack(arg0); return;}
+    }
+    String rubyClassName = scriptInfo.getRubyClassName();
+    if (rubyClassName == null) {super.onPrepareNavigateUpTaskStack(arg0); return;}
+    if ((Boolean)JRubyAdapter.runScriptlet(rubyClassName + ".instance_methods(false).any?{|m| m.to_sym == :onPrepareNavigateUpTaskStack}")) {
+      JRubyAdapter.runRubyMethod(scriptInfo.getRubyInstance(), "onPrepareNavigateUpTaskStack", arg0);
+    } else {
+      if ((Boolean)JRubyAdapter.runScriptlet(rubyClassName + ".instance_methods(false).any?{|m| m.to_sym == :on_prepare_navigate_up_task_stack}")) {
+        JRubyAdapter.runRubyMethod(scriptInfo.getRubyInstance(), "on_prepare_navigate_up_task_stack", arg0);
+      } else {
+        if ((Boolean)JRubyAdapter.runScriptlet(rubyClassName + ".instance_methods(true).any?{|m| m.to_sym == :on_prepare_navigate_up_task_stack}")) {
+          JRubyAdapter.runRubyMethod(scriptInfo.getRubyInstance(), "on_prepare_navigate_up_task_stack", arg0);
+        } else {
+          JRubyAdapter.runRubyMethod(scriptInfo.getRubyInstance(), "onPrepareNavigateUpTaskStack", arg0);
+        }
+      }
+    }
+  }
+
+  public void onProvideAssistData(android.os.Bundle arg0) {
+    if (ScriptLoader.isCalledFromJRuby()) {super.onProvideAssistData(arg0); return;}
+    if (!JRubyAdapter.isInitialized()) {
+      Log.i("Method called before JRuby runtime was initialized: RubotoActivity#onProvideAssistData");
+      {super.onProvideAssistData(arg0); return;}
+    }
+    String rubyClassName = scriptInfo.getRubyClassName();
+    if (rubyClassName == null) {super.onProvideAssistData(arg0); return;}
+    if ((Boolean)JRubyAdapter.runScriptlet(rubyClassName + ".instance_methods(false).any?{|m| m.to_sym == :onProvideAssistData}")) {
+      JRubyAdapter.runRubyMethod(scriptInfo.getRubyInstance(), "onProvideAssistData", arg0);
+    } else {
+      if ((Boolean)JRubyAdapter.runScriptlet(rubyClassName + ".instance_methods(false).any?{|m| m.to_sym == :on_provide_assist_data}")) {
+        JRubyAdapter.runRubyMethod(scriptInfo.getRubyInstance(), "on_provide_assist_data", arg0);
+      } else {
+        if ((Boolean)JRubyAdapter.runScriptlet(rubyClassName + ".instance_methods(true).any?{|m| m.to_sym == :on_provide_assist_data}")) {
+          JRubyAdapter.runRubyMethod(scriptInfo.getRubyInstance(), "on_provide_assist_data", arg0);
+        } else {
+          JRubyAdapter.runRubyMethod(scriptInfo.getRubyInstance(), "onProvideAssistData", arg0);
+        }
+      }
+    }
+  }
+
   public void onApplyThemeResource(android.content.res.Resources.Theme theme, int resid, boolean first) {
     if (ScriptLoader.isCalledFromJRuby()) {super.onApplyThemeResource(theme, resid, first); return;}
     if (!JRubyAdapter.isInitialized()) {
@@ -1472,6 +1481,5 @@ if (JRubyAdapter.isInitialized() && scriptInfo.isReadyToLoad()) {
       }
     }
   }
-*/
 
 }

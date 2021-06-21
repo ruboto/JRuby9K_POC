@@ -1,5 +1,9 @@
 package org.ruboto;
 
+import org.ruboto.Script;
+import org.ruboto.ScriptLoader;
+import java.io.IOException;
+
 public class RubotoService extends android.app.Service implements org.ruboto.RubotoComponent {
     /**
      * Called at the start of onCreate() to prepare the Activity.

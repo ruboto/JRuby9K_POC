@@ -1,5 +1,8 @@
 package org.ruboto;
 
+import java.io.IOException;
+import org.ruboto.ScriptLoader;
+
 public class RubotoBroadcastReceiver extends android.content.BroadcastReceiver implements org.ruboto.RubotoComponent {
     private final ScriptInfo scriptInfo = new ScriptInfo();
 
