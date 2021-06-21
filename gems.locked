@@ -1,0 +1,32 @@
+GIT
+  remote: https://github.com/ruboto/ruboto.git
+  revision: 9295e2a2d8ffcef6e4b7875651837c9951a50b99
+  specs:
+    ruboto (2.0.0.dev)
+      main (~> 6.0)
+      rake (>= 11.3, < 13)
+      rubyzip (~> 1.0)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    arrayfields (4.9.2)
+    chronic (0.10.2)
+    fattr (2.4.0)
+    main (6.2.3)
+      arrayfields (~> 4.7, >= 4.7.4)
+      chronic (~> 0.6, >= 0.6.2)
+      fattr (~> 2.2, >= 2.2.0)
+      map (~> 6.1, >= 6.1.0)
+    map (6.6.0)
+    rake (12.3.3)
+    rubyzip (1.3.0)
+
+PLATFORMS
+  universal-java-11
+
+DEPENDENCIES
+  ruboto (~> 2.0.dev)!
+
+BUNDLED WITH
+   2.2.20
