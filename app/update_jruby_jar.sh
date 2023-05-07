@@ -1,10 +1,19 @@
 #!/usr/bin/env bash
-set +e
+set -e
 
-VERSION="9.2.9.0"
-JAR_FILE="jruby-complete-${VERSION}.jar"
+VERSION="9.2.21.0"
+FULL_VERSION="${VERSION}"
+# FULL_VERSION="${VERSION}-SNAPSHOT" # Uncomment to use a local snapshot
+# FULL_VERSION="${VERSION}-20190822.050313-17" # Uncomment to use a remote snapshot
+JAR_FILE="jruby-complete-${FULL_VERSION}.jar"
 DOWNLOAD_DIR="$HOME/Downloads"
 DOWNLOADED_JAR="${DOWNLOAD_DIR}/${JAR_FILE}"
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+
+cd $SCRIPT_DIR
+
+[ ! -d $HOME/Downloads ] && mkdir $HOME/Downloads  # Create the directory if we don't find it
+[ ! -d ./libs ] && mkdir ./libs                    # Create the directory if we don't find it
 
 cd libs
 rm -f bcpkix-jdk15on-*.jar bcprov-jdk15on-*.jar bctls-jdk15on-*.jar cparse-jruby.jar generator.jar jline-*.jar jopenssl.jar jruby-complete-*.jar parser.jar psych.jar readline.jar snakeyaml-*.jar
