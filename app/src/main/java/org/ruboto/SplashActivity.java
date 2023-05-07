@@ -34,7 +34,7 @@ public class SplashActivity extends Activity {
         Log.d("SplashActivity onResume: ");
         super.onResume();
     }
-    
+
     public void onPause() {
         Log.d("SplashActivity onPause: ");
         super.onPause();
@@ -50,7 +50,7 @@ public class SplashActivity extends Activity {
             hideProgress();
         }
     }
-    
+
     private void initJRuby(final boolean firstTime) {
         showProgress();
         new Thread(new Runnable() {
