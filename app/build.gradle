@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
+    namespace 'org.ruboto.jruby9k_poc'
     compileSdkVersion 28
     defaultConfig {
         applicationId "org.ruboto.jruby9k_poc"
