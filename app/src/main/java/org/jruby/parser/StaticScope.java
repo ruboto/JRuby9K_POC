@@ -466,7 +466,7 @@ public class StaticScope implements Serializable {
     public AssignableNode addAssign(ISourcePosition position, RubySymbol symbolID, Node value) {
         int slot = addVariable(symbolID.idString());
         // No bit math to store level since we know level is zero for this case
-        return new DAsgnNode(position, symbolID, slot, value);
+        return new DAsgnNode(position.getLine(), symbolID, slot, value);
     }
 
     public AssignableNode assign(ISourcePosition position, RubySymbol symbolID, Node value,
@@ -477,12 +477,12 @@ public class StaticScope implements Serializable {
         // We can assign if we already have variable of that name here or we are the only
         // scope in the chain (which Local scopes always are).
         if (slot >= 0) {
-            return isBlockOrEval ? new DAsgnNode(position, symbolID, ((depth << 16) | slot), value)
-                    : new LocalAsgnNode(position, symbolID, ((depth << 16) | slot), value);
+            return isBlockOrEval ? new DAsgnNode(position.getLine(), symbolID, ((depth << 16) | slot), value)
+                    : new LocalAsgnNode(position.getLine(), symbolID, ((depth << 16) | slot), value);
         } else if (!isBlockOrEval && (topScope == this)) {
             slot = addVariable(id);
 
-            return new LocalAsgnNode(position, symbolID, slot, value);
+            return new LocalAsgnNode(position.getLine(), symbolID, slot, value);
         }
 
         // If we are not a block-scope and we go there, we know that 'topScope' is a block scope
@@ -499,11 +499,11 @@ public class StaticScope implements Serializable {
 
         if (slot >= 0) {
             return isBlockOrEval ?
-                    new DVarNode(position, ((depth << 16) | slot), symbolID) :
-                    new LocalVarNode(position, ((depth << 16) | slot), symbolID);
+                    new DVarNode(position.getLine(), ((depth << 16) | slot), symbolID) :
+                    new LocalVarNode(position.getLine(), ((depth << 16) | slot), symbolID);
         }
 
-        return isBlockOrEval ? enclosingScope.declare(position, symbolID, depth + 1) : new VCallNode(position, symbolID);
+        return isBlockOrEval ? enclosingScope.declare(position, symbolID, depth + 1) : new VCallNode(position.getLine(), symbolID);
     }
 
     /**
