@@ -35,8 +35,7 @@
         android:layout_marginBottom="8dp"
         android:text="Autoload"
         app:layout_constraintBottom_toTopOf="@+id/ar_btn"
-        app:layout_constraintEnd_toStartOf="@+id/title"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintEnd_toEndOf="@+id/autoload_activity_btn"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/autoload_activity_btn" />
 
@@ -47,22 +46,8 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="28dp"
         android:text="Autoload activity"
-        app:layout_constraintEnd_toStartOf="@+id/title"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title" />
-
-    <Button
-        android:id="@+id/for_loop_btn"
-        android:layout_width="0dp"
-        android:layout_height="51dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:text="for loop"
-        app:layout_constraintBottom_toBottomOf="@+id/autoload_activity_btn"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/title"
-        app:layout_constraintTop_toTopOf="@+id/autoload_activity_btn" />
 
     <Button
         android:id="@+id/json_btn"
@@ -70,19 +55,29 @@
         android:layout_height="wrap_content"
         android:text="JSON"
         app:layout_constraintBottom_toBottomOf="@+id/autoload_btn"
-        app:layout_constraintEnd_toEndOf="@+id/for_loop_btn"
-        app:layout_constraintStart_toStartOf="@+id/for_loop_btn"
+        app:layout_constraintEnd_toEndOf="@+id/json_pure_btn"
+        app:layout_constraintStart_toStartOf="@+id/json_pure_btn"
         app:layout_constraintTop_toTopOf="@+id/autoload_btn" />
 
     <Button
         android:id="@+id/json_pure_btn"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="50dp"
+        android:layout_marginEnd="8dp"
         android:text="JSON Pure"
         app:layout_constraintBottom_toBottomOf="@+id/ar_btn"
-        app:layout_constraintEnd_toEndOf="@+id/for_loop_btn"
-        app:layout_constraintStart_toStartOf="@+id/for_loop_btn"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/ar_btn" />
+
+    <Button
+        android:id="@+id/for_loop_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="51dp"
+        android:text="for loop"
+        app:layout_constraintBottom_toBottomOf="@+id/autoload_activity_btn"
+        app:layout_constraintEnd_toEndOf="@+id/json_pure_btn"
+        app:layout_constraintStart_toStartOf="@+id/json_pure_btn"
+        app:layout_constraintTop_toTopOf="@+id/autoload_activity_btn" />
 
     <ImageView
         android:id="@+id/imageView"
