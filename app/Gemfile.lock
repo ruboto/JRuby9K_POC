@@ -45,4 +45,4 @@ DEPENDENCIES
   sqldroid (~> 1.0)
 
 BUNDLED WITH
-   2.2.20
+   2.4.12
