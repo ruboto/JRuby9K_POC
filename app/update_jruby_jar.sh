@@ -26,7 +26,7 @@ else
 fi
 cp ${DOWNLOADED_JAR} .
 
-unzip -j ${JAR_FILE} '*.jar'
+unzip -o -j ${JAR_FILE} '*.jar'
 
 # FIXME(uwe): Why do we delete these files?
 zip generator.jar -d json/ext/ByteListTranscoder.class
@@ -53,3 +53,7 @@ while read p; do
 done < overridden_classes.txt
 
 rm overridden_classes.txt
+
+cd libs
+rm -f digest.jar
+cd - >/dev/null
