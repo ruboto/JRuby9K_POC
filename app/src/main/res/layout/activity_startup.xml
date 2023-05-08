@@ -6,6 +6,15 @@
     android:layout_height="match_parent"
     tools:context=".StartupActivity">
 
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="359dp"
+        android:layout_height="254dp"
+        android:src="@drawable/icon"
+        app:layout_constraintBottom_toTopOf="@+id/title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <TextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
@@ -22,6 +31,7 @@
         android:id="@+id/ar_btn"
         android:layout_width="0dp"
         android:layout_height="54dp"
+        android:layout_marginBottom="8dp"
         android:text="ActiveRecord"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/autoload_btn"
@@ -78,14 +88,5 @@
         app:layout_constraintEnd_toEndOf="@+id/json_pure_btn"
         app:layout_constraintStart_toStartOf="@+id/json_pure_btn"
         app:layout_constraintTop_toTopOf="@+id/autoload_activity_btn" />
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="359dp"
-        android:layout_height="254dp"
-        android:src="@drawable/icon"
-        app:layout_constraintBottom_toTopOf="@+id/title"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
