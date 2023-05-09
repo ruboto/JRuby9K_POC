@@ -221,8 +221,10 @@ public class JavaNameMangler {
     }
 
     private static final String DANGEROUS_CHARS = "\\/.;:$[]<>";
-    private static final String REPLACEMENT_CHARS = "-|,?!%{}^_";
-    private static final char ESCAPE_C = '\\';
+    // Use ConScript area of Unicode for these markers; in this case, the first ten letters of Klingon.
+    private static final String REPLACEMENT_CHARS = "\uF8D0\uF8D1\uF8D2\uF8d3\uF8D4\uF8D5\uF8D6\uF8D7\uF8D8\uF8D9";
+    private static final char ESCAPE_C = '\uF8DA';
+    // private static final char NULL_ESCAPE_C = '\uF8DB';
     private static final char NULL_ESCAPE_C = '=';
     private static final String NULL_ESCAPE = ESCAPE_C +""+ NULL_ESCAPE_C;
 
