@@ -1,48 +1,47 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    activemodel (5.2.6)
-      activesupport (= 5.2.6)
-    activerecord (5.2.6)
-      activemodel (= 5.2.6)
-      activesupport (= 5.2.6)
-      arel (>= 9.0)
+    activemodel (7.0.4.3)
+      activesupport (= 7.0.4.3)
+    activerecord (7.0.4.3)
+      activemodel (= 7.0.4.3)
+      activesupport (= 7.0.4.3)
     activerecord-deprecated_finders (1.0.4)
-    activerecord-jdbc-adapter (52.7-java)
-      activerecord (~> 5.2.0)
-    activerecord-time (0.16.0)
-      activerecord (>= 5.1, < 6.1)
-    activesupport (5.2.6)
+    activerecord-jdbc-adapter (70.1-java)
+      activerecord (~> 7.0)
+    activerecord-time (0.20.0)
+      activerecord (~> 7.0)
+    activesupport (7.0.4.3)
       concurrent-ruby (~> 1.0, >= 1.0.2)
-      i18n (>= 0.7, < 2)
-      minitest (~> 5.1)
-      tzinfo (~> 1.1)
-    arel (9.0.0)
+      i18n (>= 1.6, < 2)
+      minitest (>= 5.1)
+      tzinfo (~> 2.0)
     concurrent-ruby (1.0.5-java)
     i18n (1.8.3)
       concurrent-ruby (~> 1.0)
     minitest (5.14.4)
-    paranoia (2.4.3)
-      activerecord (>= 4.0, < 6.2)
+    paranoia (2.6.1)
+      activerecord (>= 5.1, < 7.1)
     rails-observers (0.1.5)
       activemodel (>= 4.0)
     sqldroid (1.0.1-java)
-    thread_safe (0.3.6-java)
-    tzinfo (1.2.9)
-      thread_safe (~> 0.1)
+    tzinfo (2.0.6)
+      concurrent-ruby (~> 1.0)
+    zeitwerk (2.6.8)
 
 PLATFORMS
   java
 
 DEPENDENCIES
-  activerecord (~> 5.2)
+  activerecord (~> 7.0)
   activerecord-deprecated_finders
-  activerecord-jdbc-adapter (~> 52.6)
+  activerecord-jdbc-adapter (~> 70.1)
   activerecord-time
-  concurrent-ruby (= 1.0.5)
+  concurrent-ruby (~> 1.0)
   paranoia
   rails-observers
   sqldroid (~> 1.0)
+  zeitwerk (~> 2.6)
 
 BUNDLED WITH
    2.4.12

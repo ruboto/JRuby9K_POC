@@ -30,9 +30,14 @@ class StartupActivity
   private
 
   def test_autoload
-    puts 'Testing autoload'
-    require 'active_support/dependencies'
-    ActiveSupport::Dependencies.autoload_paths << SRC_DIR
+    require "zeitwerk"
+    loader = Zeitwerk::Loader.for_gem(warn_on_extra_files: false)
+    %w[activerecord-jdbc-adapter.rb activerecord-time activerecord-time.rb concurrent_ruby_ext.jar.rb META-INF rails-observers.rb].each do |file|
+      puts "ignore #{file}"
+      loader.ignore("#{__dir__}/#{file}")
+    end
+    loader.setup
+    toast 'Autoload class...'
     AutoloadedClass.new.perform
     toast 'Autoload OK'
   rescue => e

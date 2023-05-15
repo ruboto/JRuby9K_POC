@@ -18,20 +18,20 @@ class AutoloadActivity
   private
 
   def test_autoload
-    puts 'Testing autoload'
-
-    require 'active_support/dependencies'
-
-    ActiveSupport::Dependencies.autoload_paths << SRC_DIR
-    # ActiveSupport::Dependencies.autoload_paths << APK_PATH
-
+    require "zeitwerk"
+    loader = Zeitwerk::Loader.for_gem(warn_on_extra_files: false)
+    %w[activerecord-jdbc-adapter.rb activerecord-time activerecord-time.rb concurrent_ruby_ext.jar.rb META-INF rails-observers.rb].each do |file|
+      puts "ignore #{file}"
+      loader.ignore("#{__dir__}/#{file}")
+    end
+    loader.setup
+    toast 'Autoload class...'
     AutoloadedClass.new.perform
     toast 'Autoload OK'
   rescue => e
     msg = "Exception testing autload: #{e}"
-    puts e.class
-    puts e.message
     puts msg
+    puts "#{e.class}: #{e.message}"
     puts e.backtrace.join("\n")
     toast msg
   end
