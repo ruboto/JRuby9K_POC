@@ -1,7 +1,10 @@
 require 'ruboto/activity'
 require 'ruboto/toast'
+require 'autoloading'
 
 class StartupActivity
+  include Autoloading
+
   def onCreate(savedInstanceState)
     super
     setContentView(R.layout.activity_startup)
@@ -28,21 +31,6 @@ class StartupActivity
   end
 
   private
-
-  def test_autoload
-    puts 'Testing autoload'
-    require 'active_support/dependencies'
-    ActiveSupport::Dependencies.autoload_paths << SRC_DIR
-    AutoloadedClass.new.perform
-    toast 'Autoload OK'
-  rescue => e
-    msg = "Exception testing autload: #{e}"
-    puts e.class
-    puts e.message
-    puts msg
-    puts e.backtrace.join("\n")
-    toast msg
-  end
 
   def test_for_loop
     puts 'Testing for loop'

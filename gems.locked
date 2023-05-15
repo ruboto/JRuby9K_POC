@@ -1,6 +1,7 @@
 GIT
   remote: https://github.com/ruboto/ruboto.git
-  revision: 7af8e1a10f24cfb47458d44c28d18f0ce551d63f
+  revision: 57a8aab2f0220cf22d4d283d4c3a89c915e15596
+  branch: jruby_9_4
   specs:
     ruboto (2.0.0.dev)
       main (~> 6.0)
