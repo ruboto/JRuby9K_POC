@@ -1,7 +1,10 @@
 require 'ruboto/activity'
 require 'ruboto/toast'
+require 'autoloading'
 
 class StartupActivity
+  include Autoloading
+
   def onCreate(savedInstanceState)
     super
     setContentView(R.layout.activity_startup)
@@ -28,26 +31,6 @@ class StartupActivity
   end
 
   private
-
-  def test_autoload
-    require "zeitwerk"
-    loader = Zeitwerk::Loader.for_gem(warn_on_extra_files: false)
-    %w[activerecord-jdbc-adapter.rb activerecord-time activerecord-time.rb concurrent_ruby_ext.jar.rb META-INF rails-observers.rb].each do |file|
-      puts "ignore #{file}"
-      loader.ignore("#{__dir__}/#{file}")
-    end
-    loader.setup
-    toast 'Autoload class...'
-    AutoloadedClass.new.perform
-    toast 'Autoload OK'
-  rescue => e
-    msg = "Exception testing autload: #{e}"
-    puts e.class
-    puts e.message
-    puts msg
-    puts e.backtrace.join("\n")
-    toast msg
-  end
 
   def test_for_loop
     puts 'Testing for loop'
