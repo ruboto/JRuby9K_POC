@@ -3,6 +3,7 @@ package org.jruby.util;
 import com.android.dex.Dex;
 import com.android.dx.cf.direct.DirectClassFile;
 import com.android.dx.cf.direct.StdAttributeFactory;
+import com.android.dx.command.dexer.DxContext;
 import com.android.dx.dex.DexOptions;
 import com.android.dx.dex.cf.CfOptions;
 import com.android.dx.dex.cf.CfTranslator;
@@ -42,12 +43,13 @@ public class OneShotClassLoader extends ClassLoader implements ClassDefiningClas
     public Class<?> defineClass(String name, byte[] bytes) {
         System.out.println("defineClass: name: " + name);
 
+        DxContext context = new DxContext();
         DexOptions dexOptions = new DexOptions();
         DexFile dexFile = new DexFile(dexOptions);
         DirectClassFile classFile = new DirectClassFile(bytes, name.replace('.', '/') + ".class", true);
         classFile.setAttributeFactory(StdAttributeFactory.THE_ONE);
         classFile.getMagic();
-        dexFile.add(CfTranslator.translate(classFile, null, new CfOptions(), dexOptions, dexFile));
+        dexFile.add(CfTranslator.translate(context, classFile, null, new CfOptions(), dexOptions, dexFile));
 
         try {
             Dex dex = new Dex(dexFile.toDex(null, false));
@@ -62,5 +64,15 @@ public class OneShotClassLoader extends ClassLoader implements ClassDefiningClas
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
+        return super.loadClass(name, resolve);
+    }
+
+//    @Override
+    public boolean hasDefinedClass(String name) {
+        return super.findLoadedClass(name) != null;
     }
 }

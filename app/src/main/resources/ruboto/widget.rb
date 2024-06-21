@@ -80,7 +80,7 @@ def invoke_with_converted_arguments(target, method_name, values)
   target.send(method_name, *scaled_values)
 end
 
-View.class_eval do
+class View
   @@convert_constants ||= {}
 
   def self.add_constant_conversion(from, to)

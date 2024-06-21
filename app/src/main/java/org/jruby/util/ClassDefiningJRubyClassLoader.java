@@ -30,6 +30,7 @@ package org.jruby.util;
 import com.android.dex.Dex;
 import com.android.dx.cf.direct.DirectClassFile;
 import com.android.dx.cf.direct.StdAttributeFactory;
+import com.android.dx.command.dexer.DxContext;
 import com.android.dx.dex.DexOptions;
 import com.android.dx.dex.cf.CfOptions;
 import com.android.dx.dex.cf.CfTranslator;
@@ -40,12 +41,16 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.ByteBuffer;
 import java.security.ProtectionDomain;
+import java.util.Set;
+import java.util.concurrent.ConcurrentSkipListSet;
 
 import dalvik.system.InMemoryDexClassLoader;
 
 public class ClassDefiningJRubyClassLoader extends URLClassLoader implements ClassDefiningClassLoader {
 
     final static ProtectionDomain DEFAULT_DOMAIN;
+
+    private final Set<String> definedClasses = new ConcurrentSkipListSet<>();
 
     static {
         ProtectionDomain defaultDomain = null;
@@ -68,15 +73,17 @@ public class ClassDefiningJRubyClassLoader extends URLClassLoader implements Cla
     public Class<?> defineClass(String name, byte[] bytes, ProtectionDomain domain) {
         System.out.println("defineClass: name: " + name);
 
+        DxContext context = new DxContext();
         DexOptions dexOptions = new DexOptions();
         DexFile dexFile = new DexFile(dexOptions);
         DirectClassFile classFile = new DirectClassFile(bytes, name.replace('.', '/') + ".class", true);
         classFile.setAttributeFactory(StdAttributeFactory.THE_ONE);
         classFile.getMagic();
-        dexFile.add(CfTranslator.translate(classFile, null, new CfOptions(), dexOptions, dexFile));
+        dexFile.add(CfTranslator.translate(context, classFile, null, new CfOptions(), dexOptions, dexFile));
 
         try {
             Dex dex = new Dex(dexFile.toDex(null, false));
+            definedClasses.add(name);
             return new InMemoryDexClassLoader(ByteBuffer.wrap(dex.getBytes()), this).loadClass(name);
         } catch (IOException | ClassNotFoundException e1) {
             System.out.println("Exception loading class with DexClassLoader: " + e1);
@@ -84,4 +91,14 @@ public class ClassDefiningJRubyClassLoader extends URLClassLoader implements Cla
         }
         return null;
     }
+
+    public boolean hasClass(String name) {
+        return hasDefinedClass(name) || super.findResource(name.replace('.', '/') + ".class") != null;
+    }
+
+    @Override
+    public boolean hasDefinedClass(String name) {
+        return definedClasses.contains(name);
+    }
+
 }

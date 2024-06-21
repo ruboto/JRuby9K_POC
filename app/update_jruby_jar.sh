@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-VERSION="9.4.2.0"
+VERSION="9.4.7.0"
 FULL_VERSION="${VERSION}"
 # FULL_VERSION="${VERSION}-SNAPSHOT" # Uncomment to use a local snapshot
 # FULL_VERSION="${VERSION}-20190822.050313-17" # Uncomment to use a remote snapshot
@@ -16,7 +16,7 @@ cd $SCRIPT_DIR
 [ ! -d ./libs ] && mkdir ./libs                    # Create the directory if we don't find it
 
 cd libs
-rm -f bcpkix-jdk15on-*.jar bcprov-jdk15on-*.jar bctls-jdk15on-*.jar cparse-jruby.jar generator.jar jline-*.jar jopenssl.jar jruby-complete-*.jar parser.jar psych.jar readline.jar snakeyaml-*.jar
+rm -f bc*-jdk*on-*.jar cparse-jruby.jar generator.jar jline-*.jar jopenssl.jar nkf.jar jruby-complete-*.jar parser.jar psych.jar readline.jar snakeyaml-*.jar
 
 if test -f "${DOWNLOADED_JAR}"; then
   echo "Found downloaded JAR"
