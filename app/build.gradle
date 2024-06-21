@@ -5,7 +5,7 @@ android {
     compileSdkVersion 34
     defaultConfig {
         applicationId "org.ruboto.jruby9k_poc"
-        minSdk 28
+        minSdk 27
         targetSdk 34
         versionCode 1
         versionName "1.0"
